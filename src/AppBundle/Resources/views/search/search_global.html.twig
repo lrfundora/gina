@@ -1,0 +1,153 @@
+{% extends 'AppBundle::base_front.html.twig' %}
+
+{% block header %}
+    {% include 'AppBundle:design:header_bar.html.twig' %}
+{% endblock header %}
+
+{% block body %}
+
+    <!-- WRAPPER -->
+    <div id="wrapper">
+
+        <!-- PAGE TITLE -->
+        <header id="page-title">
+            <div class="container">
+                <h1>Búsqueda global</h1>
+                <ul class="breadcrumb">
+                    {{ wo_render_breadcrumbs() }}
+                </ul>
+            </div>
+        </header>
+
+        <div class="container">
+
+            {% if resultsBusiness is defined and resultsBusiness is not empty %}
+                {% if resultsBusiness | length > 1 %}
+                    <h3 class="page-header">LUGARES</h3>
+                {% else %}
+                    <h3 class="page-header">LUGAR</h3>
+                {% endif %}
+                <hr class="half-margins"/>
+                {% for business in resultsBusiness %}
+                    <div class="row">
+                        <div class="col-sm-3">
+                            <ul class="isotope">
+                                <li class="isotope-item photography">
+                                    <div class="item-box">
+                                        <figure>
+                                            <img class="img-responsive"
+                                                 src="{{ asset(business.imgThumb.path) }}" width="100%"
+                                                 height="100%"
+                                                 alt="">
+                                        </figure>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="col-sm-5">
+                            <br/>
+                            <br/>
+
+                            <h3>
+                                <a class="styleColor"
+                                   href="{{ url('_business', {'find':business.slug}) }}">{{ business.name }}</a>
+                            </h3>
+
+                            <p>
+                                {{ business.slogan | truncate(70) }}
+                            </p>
+                        </div>
+                    </div>
+
+                {% endfor %}
+            {% endif %}
+
+            {% if resultsCategory is defined and resultsCategory is not empty %}
+                {% if resultsCategory | length > 1 %}
+                    <h3 class="page-header">CATEGORÍAS</h3>
+                {% else %}
+                    <h3 class="page-header">CATEGORÍA</h3>
+                {% endif %}
+
+                <hr class="half-margins"/>
+                <div class="row">
+                    <div class="col-sm-3">
+                        <ul>
+                            {% for category in resultsCategory %}
+
+                                <li>
+                                    <h3>
+                                        <a class="styleColor"
+                                           href="{{ url('_business_categories', {'business':category.business.slug, 'find':category.slug}) }}">{{ category.name }}</a>
+                                    </h3>
+                                </li>
+
+                            {% endfor %}
+                        </ul>
+
+                    </div>
+                </div>
+
+            {% endif %}
+
+            {% if resultsProduct is defined and resultsProduct is not empty %}
+                {% if resultsProduct | length > 1 %}
+                    <h3 class="page-header">PRODUCTOS</h3>
+                {% else %}
+                    <h3 class="page-header">PRODUCTO</h3>
+                {% endif %}
+
+                <hr class="half-margins"/>
+                {% for product in resultsProduct %}
+                    <div class="row">
+                        <div class="col-sm-3">
+                            <ul class="isotope">
+                                <li class="isotope-item photography">
+                                    <div class="item-box">
+                                        <figure>
+                                            <img class="img-responsive"
+                                                 src="{{ asset(product.photos[0].path) }}" width="100%"
+                                                 height="100%"
+                                                 alt="">
+                                        </figure>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="col-sm-5">
+                            <br/>
+                            <br/>
+
+                            <h3>
+                                <a class="styleColor"
+                                   href="{{ url('_business_products_details', {'business':product.category.business.slug, 'id':product.id}) }}">{{ product.name }}</a>
+                            </h3>
+
+                            <p>
+                                {{ product.description | truncate(70) }}
+                            </p>
+                        </div>
+                    </div>
+
+                {% endfor %}
+            {% endif %}
+
+            {% if resultsBusiness is empty and resultsCategory is empty and resultsProduct is empty %}
+                <div class="row">
+                    <div class="col-sm-12">
+                        <p class="fsize20">
+                            No hemos encontrado resultados en la búsqueda de "<strong>{{ string }}</strong>" !!!
+                        </p>
+                    </div>
+                </div>
+            {% endif %}
+
+        </div>
+    </div>
+    <!-- /WRAPPER -->
+
+{% endblock body %}
+
+{% block footer %}
+    {% include 'AppBundle:design:footer_bar.html.twig' %}
+{% endblock footer %}

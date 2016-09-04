@@ -1,0 +1,27 @@
+{% extends 'AppBundle::base_back.html.twig' %}
+
+{% block icon %}
+    <link rel="icon" type="image/png" href="{{ asset('bundles/app/assets/images/icon_error.png') }}"/>
+{% endblock %}
+
+{% block title %}
+    Error 500
+{% endblock %}
+
+{% block body %}
+
+    <div class="error-container">
+        <i class="pe-7s-way text-warning big-icon"></i>
+
+        <h1 class="text-warning">500</h1>
+        <strong>Error Interno de Servidor</strong>
+
+        <p>
+            Oops, algo anda mal!!!
+            <br/>
+            Imposible completar la petición solicitada.
+        </p>
+
+    </div>
+
+{% endblock body %}

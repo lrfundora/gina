@@ -1,0 +1,298 @@
+{% extends 'AppBundle::base_back.html.twig' %}
+
+{#{% block stylesheets %}#}
+    {#{{ parent() }}#}
+    {#<link rel="stylesheet"#}
+          {#href="{{ asset('bundles/app/backend/vendor/bootstrap-datepicker-master/dist/css/bootstrap-datepicker3.min.css') }}"/>#}
+{#{% endblock stylesheets %}#}
+
+{% block javascripts %}
+    {{ parent() }}
+    {#<script src="{{ asset('bundles/app/backend/vendor/moment/min/moment.min.js') }}"></script>#}
+    {#<script src="{{ asset('bundles/app/backend/vendor/bootstrap-datepicker-master/dist/js/bootstrap-datepicker.min.js') }}"></script>#}
+    <script src="{{ asset('bundles/app/backend/vendor/bootstrap-file-input/bootstrap.file-input.js') }}"></script>
+    <script src="{{ asset('bundles/app/backend/vendor/jquery-validation/jquery.validate.min.js') }}"></script>
+    <script>
+        $(function () {
+
+//            $('#form_schedules_0_timeStart').datepicker({});
+
+            $('input[type="file"]').bootstrapFileInput();
+            $('.input-group-addon').on('click', function (e) {
+                e.preventDefault();
+            });
+
+            $("#form").validate({
+                rules: {
+                    'form[name]': {
+                        required: true,
+                        minlength: 3,
+                        maxlength: 25
+                    },
+                    'form[slogan]': {
+                        required: true,
+                        minlength: 3,
+                        maxlength: 250
+                    },
+                    'form[address]': {
+                        required: true,
+                        minlength: 3,
+                        maxlength: 250
+                    },
+                    'form[phone]': {
+                        required: false,
+                        minlength: 6,
+                        maxlength: 20
+                    },
+                    'form[email]': {
+                        required: false,
+                        email: true
+                    },
+                    'form[description]': {
+                        required: true,
+                        maxlength: 1000
+                    },
+                    'form[imgPublicity][file]': {
+                        required: true
+                    },
+                    'form[imgThumb][file]': {
+                        required: true
+                    },
+                    'form[schedules]': {
+                        required: false
+                    }
+                },
+                messages: {
+                    'form[name]': {
+                        required: "Este campo no puede quedar vacío.",
+                        minlength: jQuery.validator.format("El campo debe tener al menos {0} caracteres."),
+                        maxlength: jQuery.validator.format("El campo puede tener como máximo {0} caracteres.")
+                    },
+                    'form[slogan]': {
+                        required: "Este campo no puede quedar vacío.",
+                        minlength: jQuery.validator.format("El campo debe tener al menos {0} caracteres."),
+                        maxlength: jQuery.validator.format("El campo puede tener como máximo {0} caracteres.")
+                    },
+                    'form[address]': {
+                        required: "Este campo no puede quedar vacío.",
+                        minlength: jQuery.validator.format("El campo debe tener al menos {0} caracteres."),
+                        maxlength: jQuery.validator.format("El campo puede tener como máximo {0} caracteres.")
+                    },
+                    'form[phone]': {
+                        minlength: jQuery.validator.format("El campo debe tener al menos {0} caracteres."),
+                        maxlength: jQuery.validator.format("El campo puede tener como máximo {0} caracteres.")
+                    },
+                    'form[email]': {
+                        email: "Introduce una dirección de correo electrónico válido."
+                    },
+                    'form[description]': {
+                        required: "Este campo no puede quedar vacío.",
+                        maxlength: jQuery.validator.format("El campo puede tener como máximo {0} caracteres.")
+                    },
+                    'form[imgPublicity][file]': {
+                        required: "Selecciona una imagen de publicidad."
+                    },
+                    'form[imgThumb][file]': {
+                        required: "Selecciona una imagen de presentación."
+                    }
+                },
+                submitHandler: function (form) {
+                    form.submit();
+                },
+                errorPlacement: function (error, element) {
+                    $(element)
+                            .closest("form")
+                            .find("label[for='" + element.attr("id") + "']")
+                            .append(error);
+                },
+                errorElement: "span"
+            });
+        });
+    </script>
+{% endblock javascripts %}
+
+{% block header %}
+    {% include 'AppBundle:backend/design:header_bar.html.twig' %}
+{% endblock header %}
+
+{% block body %}
+    <div id="wrapper">
+
+    <!-- Breadcrumb -->
+    <div class="normalheader transition animated fadeIn small-header">
+        <div class="hpanel">
+            <div class="panel-body">
+                <a class="small-header-action" href="#">
+                    <div class="clip-header">
+                        <i class="fa fa-arrow-down"></i>
+                    </div>
+                </a>
+
+                <div id="hbreadcrumb" class="pull-right">
+                    <ol class="hbreadcrumb breadcrumb">
+                        <li><a href="{{ path('_admin_index') }}">Inicio</a></li>
+                        <li>
+                            <a href="{{ path('_admin_business') }}">Negocio</a>
+                        </li>
+                        <li class="active">
+                            <span>Agregar</span>
+                        </li>
+                    </ol>
+                </div>
+                <h2 class="font-light m-b-xs">
+                    panel de control
+                </h2>
+                <small>Herramienta administrativa que permite mantener actualizada la información</small>
+            </div>
+        </div>
+    </div>
+    <!-- /Breadcrumb -->
+
+    <!-- Form -->
+    <div class="content animate-panel">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="hpanel">
+                <div class="panel-heading font-uppercase">
+                    {#<div class="panel-tools">#}
+                    {#<a class="showhide"><i class="fa fa-chevron-up"></i></a>#}
+                    {#</div>#}
+                    Agregar nuevo negocio
+                </div>
+                <div class="panel-body">
+                    <div class="hpanel">
+                        <div class="panel-body">
+                            <div class="">
+                                <h3 class="text-uppercase">
+                                    <a href="{{ path('_admin_business') }}" class="btn btn-default" style="margin-top: -5px;">
+                                        <i class="fa fa-arrow-left"></i>
+                                    </a>
+                                    nuevo negocio
+                                </h3>
+                            </div>
+
+                            <hr class="left-separator">
+
+                            <div class="row"
+                                 style="background-color: #f1f3f6; border: 1px solid #ddd; margin: 15px 0; padding: 10px 0 10px 0;">
+                                {{ form_start(form, {'attr':{'id':'form', 'name':'form'}}) }}
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        {{ form_label(form.name) }}
+                                        {{ form_widget(form.name) }}
+                                    </div>
+                                    <div class="form-group">
+                                        {{ form_label(form.slogan) }}
+                                        {{ form_widget(form.slogan) }}
+                                    </div>
+                                    <div class="form-group">
+                                        {{ form_label(form.phone) }}
+                                        {{ form_widget(form.phone) }}
+                                    </div>
+                                    <div class="form-group">
+                                        {{ form_label(form.email) }}
+                                        {{ form_widget(form.email) }}
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="col-sm-8" style="margin-left: -15px; margin-right: 15px">
+                                            {{ form_label(form.imgPublicity) }}
+                                            {{ form_label(form.imgPublicity.file) }}
+                                            <div class="input-group">
+                                    <span class="input-group-addon">
+                                        <i class="fa fa-picture-o"></i>
+                                    </span>
+                                                {{ form_widget(form.imgPublicity.file, {'attr':{'title':'Selecciona una imagen de publicidad (1300x500)'}}) }}
+                                            </div>
+                                        </div>
+
+                                        <div class="col-sm-4">
+                                            <div class="form-group">
+                                                {{ form_label(form.imgPublicityAnimation) }}
+                                                {{ form_widget(form.imgPublicityAnimation) }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        {{ form_label(form.imgThumb) }}
+                                        {{ form_label(form.imgThumb.file) }}
+                                        <div class="input-group">
+                                    <span class="input-group-addon">
+                                        <i class="fa fa-picture-o"></i>
+                                    </span>
+                                            {{ form_widget(form.imgThumb.file, {'attr':{'title':'Selecciona una imagen de presentación (400x250)'}}) }}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        {{ form_label(form.address) }}
+                                        {{ form_widget(form.address) }}
+                                    </div>
+                                    <div class="form-group">
+                                        {{ form_label(form.description) }}
+                                        {{ form_widget(form.description) }}
+                                    </div>
+                                    <div class="col-sm-12" style="margin-left: -15px;">
+                                        <p class="alert alert-info p-xs">
+                                            <i class="fa fa-info-circle"></i>
+                                            Para agregar
+                                            más horarios de trabajo tiene que hacerlo en la vista de edición
+                                        </p>
+                                    </div>
+                                    <div class="col-sm-12 form-group">
+                                        <br />
+                                        {% for schedule in form.schedules %}
+                                            <label>Horario de trabajo</label>
+                                            <div class="form-group">
+                                                <div class="col-sm-4">
+                                                    {{ form_widget(schedule.isAllHours) }}
+                                                    {{ form_label(schedule.isAllHours) }}
+                                                </div>
+                                                <div class="col-sm-8">
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon">De</span>
+                                                        {{ form_label(schedule.timeStart) }}
+                                                        {{ form_widget(schedule.timeStart) }}
+                                                        <span class="input-group-addon">a</span>
+                                                        {{ form_label(schedule.timeEnd) }}
+                                                        {{ form_widget(schedule.timeEnd) }}
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-4">
+                                                    {{ form_widget(schedule.isAllDays) }}
+                                                    {{ form_label(schedule.isAllDays) }}
+                                                </div>
+                                                <div class="col-sm-8">
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon">De</span>
+                                                        {{ form_label(schedule.dayStart) }}
+                                                        {{ form_widget(schedule.dayStart) }}
+                                                        <span class="input-group-addon">a</span>
+                                                        {{ form_label(schedule.dayEnd) }}
+                                                        {{ form_widget(schedule.dayEnd) }}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                                <div class="col-sm-12">
+                                    {{ form_widget(form.add) }}
+                                    {{ form_end(form) }}
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /Form -->
+
+        <!-- Footer -->
+        {% include 'AppBundle:backend/design:footer_bar.html.twig' %}
+        <!-- /Footer -->
+
+    </div>
+
+{% endblock body %}

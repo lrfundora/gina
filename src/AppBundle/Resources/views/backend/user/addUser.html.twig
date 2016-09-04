@@ -1,0 +1,191 @@
+{% extends 'AppBundle::base_back.html.twig' %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('bundles/app/backend/vendor/jquery-validation/jquery.validate.min.js') }}"></script>
+    <script>
+        $(function () {
+
+            // Validate Form
+            $("#form").validate({
+                rules: {
+                    'form[name]': {
+                        required: true,
+                        minlength: 3
+                    },
+                    'form[lastname]': {
+                        required: true,
+                        minlength: 3
+                    },
+                    'form[user]': {
+                        required: true,
+                        minlength: 3,
+                        maxlength: 40
+                    },
+                    'form[password][first]': {
+                        required: true,
+                        minlength: 3,
+                        maxlength: 255
+                    }
+                },
+                messages: {
+                    'form[name]': {
+                        required: "Este campo no puede quedar vacío.",
+                        minlength: jQuery.validator.format("El campo debe tener al menos {0} caracteres.")
+                    },
+                    'form[lastname]': {
+                        required: "Este campo no puede quedar vacío.",
+                        minlength: jQuery.validator.format("El campo debe tener al menos {0} caracteres.")
+                    },
+                    'form[user]': {
+                        required: "Este campo no puede quedar vacío.",
+                        minlength: jQuery.validator.format("El campo debe tener al menos {0} caracteres."),
+                        maxlength: jQuery.validator.format("El campo puede tener como máximo {0} caracteres.")
+                    },
+                    'form[password]': {
+                        required: "Este campo no puede quedar vacío.",
+                        minlength: jQuery.validator.format("El campo debe tener al menos {0} caracteres."),
+                        maxlength: jQuery.validator.format("El campo puede tener como máximo {0} caracteres.")
+                    }
+                },
+                submitHandler: function (form) {
+                    form.submit();
+                },
+                errorPlacement: function (error, element) {
+                    $(element)
+                            .closest("form")
+                            .find("label[for='" + element.attr("id") + "']")
+                            .append(error);
+                },
+                errorElement: "span"
+            });
+
+        });
+    </script>
+{% endblock javascripts %}
+
+{% block header %}
+    {% include 'AppBundle:backend/design:header_bar.html.twig' %}
+{% endblock header %}
+
+{% block body %}
+    <div id="wrapper">
+
+    <!-- Breadcrumb -->
+    <div class="normalheader transition animated fadeIn small-header">
+        <div class="hpanel">
+            <div class="panel-body">
+                <a class="small-header-action" href="#">
+                    <div class="clip-header">
+                        <i class="fa fa-arrow-down"></i>
+                    </div>
+                </a>
+
+                <div id="hbreadcrumb" class="pull-right">
+                    <ol class="hbreadcrumb breadcrumb">
+                        <li><a href="{{ path('_admin_index') }}">Inicio</a></li>
+                        <li>
+                            <a href="{{ path('_admin_user') }}">Usuario</a>
+                        </li>
+                        <li class="active">
+                            <span>Agregar</span>
+                        </li>
+                    </ol>
+                </div>
+                <h2 class="font-light m-b-xs">
+                    panel de control
+                </h2>
+                <small>Herramienta administrativa que permite mantener actualizada la información</small>
+            </div>
+        </div>
+    </div>
+    <!-- /Breadcrumb -->
+
+    <!-- Form -->
+    <div class="content animate-panel">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="hpanel">
+                <div class="panel-heading font-uppercase">
+                    {#<div class="panel-tools">#}
+                        {#<a class="showhide"><i class="fa fa-chevron-up"></i></a>#}
+                    {#</div>#}
+                    Agregar nuevo usuario
+                </div>
+                <div class="panel-body">
+                    <div class="hpanel">
+                        <div class="panel-body">
+                            <div class="">
+                                <h3 class="text-uppercase">
+                                    <a href="{{ path('_admin_user') }}" class="btn btn-default" style="margin-top: -5px;">
+                                        <i class="fa fa-arrow-left"></i>
+                                    </a>
+                                    nuevo usuario
+                                </h3>
+                            </div>
+
+                            <hr class="left-separator">
+
+                            <div class="row">
+
+                                <div class="col-sm-3"></div>
+                                <div class="col-sm-6">
+                                    {% for Message in app.session.flashbag.get('userAddSuccess') %}
+                                        <p class="alert alert-success">
+                                            <i class="fa fa-smile-o"></i>
+                                            {{ Message | raw }}
+                                        </p>
+                                        <br/>
+                                    {% endfor %}
+                                    {% for Message in app.session.flashbag.get('userAddError') %}
+                                        <p class="alert alert-danger">
+                                            <i class="fa fa-frown-o"></i>
+                                            {{ Message | raw }}
+                                        </p>
+                                        <br/>
+                                    {% endfor %}
+                                    <div class="row show-grid">
+                                        <div class="col-sm-12">
+                                            {{ form_start(form, {'attr':{'id':'form', 'name':'form' }}) }}
+                                            <div class="form-group">
+                                                {{ form_label(form.name) }}
+                                                {{ form_widget(form.name) }}
+                                            </div>
+                                            <div class="form-group">
+                                                {{ form_label(form.lastname) }}
+                                                {{ form_widget(form.lastname) }}
+                                            </div>
+                                            <div class="form-group">
+                                                {{ form_label(form.user) }}
+                                                {{ form_widget(form.user) }}
+                                            </div>
+                                            <div class="form-group">
+                                                {{ form_label(form.password) }}
+                                                {{ form_widget(form.password) }}
+                                            </div>
+                                            <div class="form-group">
+                                                {{ form_widget(form.isActive) }}
+                                                {{ form_label(form.isActive) }}
+                                            </div>
+                                            {{ form_widget(form.add) }}
+                                            {{ form_end(form) }}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-3"></div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /Form -->
+
+        <!-- Footer -->
+        {% include 'AppBundle:backend/design:footer_bar.html.twig' %}
+        <!-- /Footer -->
+
+    </div>
+
+{% endblock body %}

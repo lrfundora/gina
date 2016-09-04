@@ -1,0 +1,160 @@
+{% extends 'AppBundle::base_front.html.twig' %}
+
+{% block header %}
+    {% include 'AppBundle:design:header_bar.html.twig' %}
+{% endblock header %}
+
+{% block body %}
+
+    <!-- WRAPPER -->
+    <div id="wrapper">
+
+        <div id="shop">
+
+            <!-- PAGE TITLE -->
+            <header id="page-title">
+                <div class="container">
+                    <h1>Activación de cuenta</h1>
+                    <ul class="breadcrumb">
+                        {{ wo_render_breadcrumbs() }}
+                    </ul>
+                </div>
+            </header>
+
+
+            <section class="container">
+
+                <div class="row">
+
+                    {% if userInfo %}
+
+                        <div class="col-md-2 hidden-xs">
+                        </div>
+
+                        <!-- INFORMATION ACCOUNT -->
+                        <div class="col-md-8">
+
+                            <h2><strong>Informe de activación de tu cuenta</strong></h2>
+
+                            <div class="white-row">
+
+                                {% if userInfo.graduated or userInfo.employment or userInfo.aboutMe %}
+                                    <div class="alert alert-success">
+                                        <i class="fa fa-smile-o"></i>
+                                        Datos <strong>guardados con exito!</strong>
+                                    </div>
+                                {% else %}
+                                    <div class="alert alert-success">
+                                        <i class="fa fa-smile-o"></i>
+                                        Cuenta <strong>activada con exito!</strong>
+                                    </div>
+                                {% endif %}
+                                <p>Información de tu cuenta:</p>
+                                <ul class="list-icon check">
+                                    <li>Nombre y apellidos:
+                                        <strong>{{ userInfo.name }} {{ userInfo.lastname }}</strong>
+                                    </li>
+                                    <li>Correo electrónico: <strong>{{ userInfo.email }}</strong></li>
+                                    <li>Sexo:
+                                        <strong>
+                                            {% if userInfo.sex %}
+                                                <i class="fa fa-male"></i>
+                                                Hombre
+                                            {% else %}
+                                                <i class="fa fa-female"></i>
+                                                Mujer
+                                            {% endif %}
+                                        </strong>
+                                    </li>
+                                    <li>Estado de la cuenta:
+                                        <strong>
+                                            {% if userInfo.isActive %}
+                                                <i class="fa fa-check-circle"></i>
+                                                Activo
+                                            {% else %}
+                                                <i class="fa fa-times-circle"></i>
+                                                Inactivo
+                                            {% endif %}
+                                        </strong>
+                                    </li>
+                                    <li>Fecha de nacimiento: <strong>{{ userInfo.bornDate | date ('d/m/Y') }}</strong>
+                                    </li>
+                                    <li>Fecha de creación: <strong>{{ userInfo.registerDate | date ('d/m/Y') }}</strong>
+                                    </li>
+                                </ul>
+
+                                <hr class="half-margins"/>
+
+                                <p>
+                                    Tu cuenta <strong>está lista! </strong>
+                                    <a href="{{ url('_login') }}">Has click aquí para iniciar tu sesión</a>
+                                </p>
+                            </div>
+
+                        </div>
+                        <!-- /INFORMATION ACCOUNT -->
+
+                        <div class="col-md-2 hidden-xs">
+                        </div>
+
+                    {% else %}
+
+                        <div class="col-md-2 hidden-xs">
+                        </div>
+
+                        <!-- ACTIVATION ERROR -->
+                        <div class="col-md-8">
+
+                            <h2><strong>Informe de activación de tu cuenta</strong></h2>
+
+                            <div class="white-row">
+
+                                <div class="alert alert-danger">
+                                    <i class="fa fa-frown-o"></i>
+                                    <strong>Error de activación!</strong>
+                                </div>
+
+                                <p>Información de error de activación:</p>
+                                <ul class="list-icon check">
+                                    <li>
+                                        Puede que tu cuenta ya esté activada.
+                                    </li>
+                                    <li>
+                                        Puede que el código de activación de tu cuenta haya cambiado.
+                                    </li>
+                                    <li>
+                                        Puede que tu cuenta no exista.
+                                    </li>
+                                </ul>
+
+                                <hr class="half-margins"/>
+
+                                <p>
+                                    <a href="{{ url('_support',{'page':'contact-us'}) }}">Contacta</a> con nosotros.
+                                    <br/>
+                                    Create una
+                                    <a href="{{ url('_register') }}"> cuenta nueva</a>.
+                                </p>
+                            </div>
+
+                        </div>
+                        <!-- /ACTIVATION ERROR -->
+
+                        <div class="col-md-2 hidden-xs">
+                        </div>
+
+                    {% endif %}
+
+                </div>
+
+            </section>
+
+        </div>
+    </div>
+    <!-- /WRAPPER -->
+
+{% endblock body %}
+
+{% block footer %}
+    {% include 'AppBundle:design:footer_bar.html.twig' %}
+{% endblock footer %}

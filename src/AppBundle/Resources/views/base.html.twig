@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+
+{% block htmlselector %}
+<html>
+{% endblock %}
+
+<head>
+
+    <meta charset="utf-8"/>
+    <meta name="keywords" content="publicity, e-commerce"/>
+    <meta name="description" content=""/>
+    <meta name="Author" content="Lázaro Ruiz Fundora"/>
+
+    {% block meta %}{% endblock %}
+
+    <title>
+        {% block title %}{% endblock %}
+    </title>
+
+    {% block icon %}
+    {% endblock %}
+
+    {% block stylesheets %}
+    {% endblock %}
+
+</head>
+
+<body>
+
+{% block header %}{% endblock %}
+{% block body %}{% endblock %}
+{% block footer %}{% endblock %}
+{% block javascripts %}{% endblock %}
+
+</body>
+</html>

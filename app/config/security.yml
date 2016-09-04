@@ -1,0 +1,45 @@
+security:
+
+   encoders:
+      AppBundle\Entity\User:
+        algorithm: bcrypt
+        iterations: 15
+
+   role_hierarchy:
+      ROLE_ADMIN: [ROLE_ADMIN, ROLE_MODERATOR]
+
+   providers:
+      db_user:
+        entity:
+          class: AppBundle:User
+          property: user
+
+   firewalls:
+      dev:
+        pattern: ^/(_(profiler|wdt)|css|images|js)/
+        security: false
+
+      secured_zone:
+        pattern: ^/
+        anonymous: ~
+
+        form_login:
+          check_path: _check
+          login_path: _login
+          default_target_path: _admin
+
+        logout:
+          path: _logout
+          target: _login
+
+        remember_me:
+          key: "%secret%"
+          lifetime: 31536000  # 365 days in seconds
+          path: /
+          domain: ~           # Defaults to the current domain from $_SERVER
+
+   access_control:
+      - { path:  ^/admin/auth/, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+      - { path:  ^/admin/user, roles: [ROLE_ADMIN] }
+      - { path:  ^/admin, roles: [ROLE_ADMIN, ROLE_MODERATOR] }
+      - { path:  ^/admin/, roles: [ROLE_ADMIN, ROLE_MODERATOR] }

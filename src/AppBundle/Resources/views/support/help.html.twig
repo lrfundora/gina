@@ -1,0 +1,43 @@
+{% extends 'AppBundle::base_front.html.twig' %}
+
+{% block header %}
+    {% include 'AppBundle:design:header_bar.html.twig' %}
+{% endblock header %}
+
+{% block body %}
+
+    <!-- WRAPPER -->
+    <div id="wrapper">
+
+        <!-- PAGE TITLE -->
+        <header id="page-title">
+
+            <div class="container">
+                <h1>Ayuda</h1>
+                <ul class="breadcrumb">
+                    {{ wo_render_breadcrumbs() }}
+                </ul>
+            </div>
+        </header>
+
+        <!-- HELP -->
+        <section class="container">
+
+            <article>
+                <h2>Ayuda</h2>
+                <p>
+                    Página en construcción.
+                </p>
+            </article>
+
+        </section>
+        <!-- /HELP -->
+
+    </div>
+    <!-- /WRAPPER -->
+
+{% endblock body %}
+
+{% block footer %}
+    {% include 'AppBundle:design:footer_bar.html.twig' %}
+{% endblock footer %}

@@ -1,0 +1,202 @@
+<!-- Top Bar -->
+<header id="topHead">
+    <div class="container">
+        {% for app in data %}
+            <!-- PHONE/EMAIL -->
+            <span class="quick-contact pull-left hidden-xs">
+					<i class="fa fa-phone"></i>{{ app.phone }} &bull;
+                <a href="mailto:{{ app.email }}">{{ app.email }}</a>
+				</span>
+            <!-- /PHONE/EMAIL -->
+        {% endfor %}
+
+        <!-- OFFERS MOBILE BUTTON -->
+        <a class="pull-right" id="btn-mobile-quick-cart"
+           href="{{ url('_offers', {'find':'all', 'field':'discount', 'order':'desc'}) }}"
+           data-toggle="tooltip" data-placement="bottom" data-original-title="Ofertas">
+            <i class="fa fa-gift"></i>
+        </a>
+        <!-- /OFFERS MOBILE BUTTON -->
+
+        <!-- LINKS -->
+        <div class="pull-right nav hidden-xs">
+            <a href="{{ url('_support_contact-us') }}"><i class="fa fa-envelope"></i> Contacto</a>
+            <a href="{{ url('_support_about-us') }}"><i class="fa fa-info-circle"></i> Nosotros</a>
+        </div>
+        <!-- /LINKS -->
+
+    </div>
+</header>
+<!-- /Top Bar -->
+
+<!-- TOP NAV -->
+<header id="topNav" class="topHead"><!-- remove class="topHead" if no topHead used! -->
+<div class="container">
+
+<!-- Mobile Menu Button -->
+<button class="btn btn-mobile" data-toggle="collapse" data-target=".nav-main-collapse">
+    <i class="fa fa-bars"></i>
+</button>
+
+{% for app in data %}
+<!-- Logo text or image -->
+<a class="logo" href="{{ url('_home') }}">
+    <img src="{{ asset(app.logoTop.path) }}" alt="{{ app.name }}"/>
+</a>
+
+<!-- Top Nav -->
+<div class="navbar-collapse nav-main-collapse collapse pull-right">
+<nav class="nav-main mega-menu">
+<ul class="nav nav-pills nav-main scroll-menu" id="topMain">
+<li>
+    <a class="dropdown-toggle" href="{{ url('_home') }}">
+        Inicio
+    </a>
+</li>
+
+<!-- MENU -->
+    {% for business in app.business %}
+        <li class="dropdown">
+            <a class="dropdown-toggle" href="#">
+                {{ business.name }} <i class="fa fa-angle-down"></i>
+            </a>
+            <ul class="dropdown-menu">
+                <li><a href="{{ url('_offers', {'find':business.slug, 'field':'discount', 'order':'desc'}) }}">
+                        <i class="fa fa-gift"></i>
+                        Ofertas
+                    </a>
+                </li>
+                <li class="divider"></li>
+                <li><a href="{{ url('_business_categories', {'business':business.slug}) }}">
+                        <i class="fa fa-filter"></i>
+                        Categorías
+                    </a>
+                </li>
+                <li><a href="{{ url('_business_products', {'business':business.slug}) }}">
+                        <i class="fa fa-star-o"></i>
+                        Productos
+                    </a>
+                </li>
+                <li class="divider"></li>
+                <li><a href="{{ url('_business', {'find':business.slug}) }}">
+                        <i class="fa fa-info-circle"></i>
+                        Información
+                    </a>
+                </li>
+            </ul>
+        </li>
+    {% endfor %}
+
+{% endfor %}
+
+<li class="dropdown">
+    <a class="dropdown-toggle" href="#">
+        Soporte técnico <i class="fa fa-angle-down"></i>
+    </a>
+    <ul class="dropdown-menu">
+        {#<li><a href="{{ url('_support_help') }}"><i class="fa fa-life-saver"></i> Ayuda</a></li>#}
+        {#<li class="divider"></li>#}
+        <li><a href="{{ url('_support_contact-us') }}"><i class="fa fa-envelope"></i>Contacto</a>
+        </li>
+        <li><a href="{{ url('_support_about-us') }}"><i class="fa fa-info-circle"></i>Nosotros</a>
+        </li>
+        {#<li><a href="{{ url('_support_terms') }}"><i class="fa fa-book"></i>Derechos y responsabilidades</a>#}
+        {#</li>#}
+        {#<li class="divider"></li>#}
+        {#<li>#}
+            {#<a href="{{ url('_support_terms') }}"><i class="fa fa-search"></i>Búsqueda con parámetros</a>#}
+        {#</li>#}
+    </ul>
+</li>
+<!-- /MENU -->
+
+<!-- GLOBAL SEARCH -->
+<li class="search">
+    <!-- search form -->
+    <form method="get" action="{{ url('_search_global') }}" class="input-group pull-right">
+        <input type="text" class="form-control" name="find" id="find" value="" placeholder="Búsqueda global...">
+									<span class="input-group-btn">
+										<button class="btn btn-primary notransition"><i class="fa fa-search"></i>
+                                        </button>
+									</span>
+    </form>
+    <!-- /search form -->
+</li>
+<!-- /GLOBAL SEARCH -->
+
+<!-- QUICK SHOP CART -->
+<li class="quick-cart">
+
+    {% if numOffer %}
+        <span class="badge pull-right"
+              style="background-color:#f07057; color:#fff;">{{ numOffer }}</span>
+    {% endif %}
+
+    <div class="quick-cart-content">
+        {% if numOffer %}
+
+            {% if numOffer == 1 %}
+                <p><i class="fa fa-gift"></i> {{ numOffer }} oferta</p>
+            {% elseif numOffer < 4 %}
+                <p><i class="fa fa-gift"></i> {{ numOffer }} ofertas</p>
+            {% else %}
+                <p><i class="fa fa-gift"></i> Las 3 mejores ofertas de {{ numOffer }} en total</p>
+            {% endif %}
+
+            {% for product in topOffers %}
+                <a class="item"
+                   href="{{ url('_business_products_details', {'business':product.category.business.slug, 'id':product.id}) }}">
+                    <!-- item -->
+                    <img class="pull-left" src="{{ asset(product.photos[0].path) }}"
+                         width="90"
+                         alt=""/>
+
+                    <div class="inline-block">
+                        <span class="title">{{ product.category.business.name }}</span>
+                        <span class="title">{{ product.name }}</span>
+                                            <span class="price">Precio
+                                                {% set price = product.price - product.price*product.discount / 100 %}
+                                                <small style="color: #FF851B">
+                                                    ${{ price | number_format(2, '.', ',') }}</small>
+                                                <small style="color: #999; text-decoration:line-through;">
+                                                    ${{ product.price }}</small></span>
+                        <span class="title">Descuento: {{ product.discount }}%</span>
+                    </div>
+                </a><!-- /item -->
+            {% endfor %}
+
+            {% if numOffer > 3 %}
+                <!-- QUICK CART BUTTONS -->
+                <div class="row cart-footer">
+                    <div class="col-md-12 nopadding-center">
+                        <a href="{{ url('_offers', {'find':'all', 'field':'discount', 'order':'desc'}) }}"
+                           class="btn btn-primary btn-xs fullwidth">VER
+                            TODAS LAS
+                            OFERTAS</a>
+                    </div>
+                </div>
+                <!-- /QUICK CART BUTTONS -->
+            {% endif %}
+
+        {% else %}
+            <div class="alert alert-warning">
+                <i class="fa fa-frown-o"></i>
+                No hay <strong>ofertas</strong>
+            </div>
+        {% endif %}
+
+    </div>
+
+</li>
+<!-- /QUICK SHOP CART -->
+
+</ul>
+</nav>
+</div>
+<!-- /Top Nav -->
+
+</div>
+</header>
+
+<span id="header_shadow"></span>
+<!-- /TOP NAV -->

@@ -1,0 +1,134 @@
+<!-- Header -->
+<div id="header">
+    <div class="color-line">
+    </div>
+    <div id="logo" class="text-center" style="padding: 3px 10px 0 5px;">
+        {#<div  >#}
+            {#<img src="{{ asset(appConfig.logoTop.path) }}" width="183px" height="55px" alt="{{ appConfig.name }}" style="margin: -18px 0 0 -20px">#}
+        {#</div>#}
+
+        <span class="font-uppercase" style="font-size: 30px;">
+            {{ appConfig.name }}
+        </span>
+    </div>
+    <nav role="navigation">
+        <div class="header-link hide-menu"><i class="fa fa-bars"></i></div>
+        <div class="small-logo">
+            <span class="text-primary font-uppercase">{{ appConfig.name }}</span>
+        </div>
+        {#<form role="search" class="navbar-form-custom" method="post" action="#">#}
+            {#<div class="form-group">#}
+                {#<input type="text" placeholder="Busca algo en espacial..." class="form-control" name="find" id="find">#}
+            {#</div>#}
+        {#</form>#}
+        <div class="navbar-right">
+            <ul class="nav navbar-nav no-borders">
+                <li class="dropdown">
+                    <a class="dropdown-toggle label-menu-corner" href="#" data-toggle="dropdown">
+                        <i class="pe-7s-mail"></i>
+                        {% if nNotice > 0 %}
+                            <span class="label label-success">{{ nNotice }}</span>
+                        {% endif %}
+                    </a>
+                    <ul class="dropdown-menu hdropdown animated flipInX">
+                        {% if nNotice > 0 %}
+
+                            <div class="title">
+                                {{ nNotice == 1 ?'Tiene 1 mensaje nuevo' :'Tienes '~nNotice~' mensajes nuevos' }}
+                            </div>
+
+                            {% for notice in newNotices %}
+                            <li>
+                                <a href="{{ url('_admin_notice_show', {'id':notice.id}) }}">
+                                    {{ notice.subject }}
+                                </a>
+                            </li>
+                            {% endfor %}
+
+                        {% else %}
+
+                            <div class="title">
+                                No hay mensajes nuevos
+                            </div>
+
+                        {% endif %}
+                        <li class="summary"><a href="{{ url('_admin_notice') }}">Ver todos los mensajes</a></li>
+                    </ul>
+                </li>
+                <li class="dropdown">
+                    <a href="{{ url('_logout') }}">
+                        <i class="pe-7s-power" style="color: #ff0000"></i>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+</div>
+
+<!-- Navigation -->
+<aside id="menu">
+    <div id="navigation">
+        <div class="profile-picture">
+            <a href="{{ url('_admin_index') }}">
+                <img src="{{ app.user.photo ? asset('bundles/app/images/'~app.user.photo.name) : asset('bundles/app/backend/images/default-user.png') }}" class="img-circle m-b" width="125px" height="125px" alt="{{ app.user.fullname }}">
+            </a>
+
+            <div class="stats-label text-color">
+                <span class="font-extra-bold font-uppercase">{{ app.user.fullname }}</span>
+
+                <div class="dropdown">
+                    <a class="dropdown-toggle" href="#" data-toggle="dropdown">
+                        <small class="text-muted">Perfil <b class="caret"></b></small>
+                    </a>
+                    <ul class="dropdown-menu animated fadeInRight m-t-xs">
+                        <li><a href="{{ url('_admin_profile',{'tab':'1'}) }}">Infomación básica</a></li>
+                        <li><a href="{{ url('_admin_profile',{'tab':'2'}) }}">Cambiar imagen</a></li>
+                        <li><a href="{{ url('_admin_profile',{'tab':'3'}) }}">Cambiar contraseña</a></li>
+                        <li class="divider"></li>
+                        <li><a href="{{ url('_logout') }}">Salir</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <small class="text-muted">Mantenga su información de Perfil actualizada!</small>
+                </div>
+            </div>
+        </div>
+
+        <ul class="nav" id="side-menu">
+            <li {{ menu=='index' ? 'class="active"' : '' }}>
+                <a href="{{ url('_admin_index') }}"> <span class="nav-label">inicio<i class="pe-7s-home pull-right"></i></span></a>
+            </li>
+            <li {{ menu=='system' ? 'class="active"' : '' }}>
+                <a href="{{ url('_admin_system') }}"> <span class="nav-label">Empresa<i class="pe-7s-server pull-right"></i></span></a>
+            </li>
+            <li {{ menu=='business' ? 'class="active"' : '' }}>
+                <a href="{{ url('_admin_business') }}"><span class="nav-label">Negocio</span><i class="pe-7s-portfolio pull-right"></i></a>
+            </li>
+            <li {{ menu=='category' ? 'class="active"' : '' }}>
+                <a href="{{ url('_admin_category') }}"><span class="nav-label">Categoría</span><i class="pe-7s-keypad pull-right"></i></a>
+            </li>
+            <li {{ menu=='product' ? 'class="active"' : '' }}>
+                <a href="{{ url('_admin_product') }}"><span class="nav-label">Producto</span><i class="pe-7s-shopbag pull-right"></i></a>
+            </li>
+            {% if is_granted('ROLE_ADMIN') %}
+                <li {{ menu=='user' ? 'class="active"' : '' }}>
+                    <a href="{{ url('_admin_user') }}"><span class="nav-label">Usuario</span><i class="pe-7s-users pull-right"></i></a>
+                </li>
+            {% endif %}
+            <li {{ menu=='notice' ? 'class="active"' : '' }}>
+                <a href="{{ url('_admin_notice') }}">
+                    <span class="nav-label">notificaciones </span>
+                    {% if nNotice > 0 %}
+                        <span class="label label-success pull-right">{{ nNotice }}</span>
+                    {% else %}
+                        <span class="label label-default pull-right">0</span>
+                    {% endif %}
+                </a>
+            </li>
+            <li>
+                <a href="{{ url('_logout') }}"> <span class="nav-label">salir <i class="pe-7s-power pull-right" style="color: #ff0000"></i></span></a>
+            </li>
+
+        </ul>
+    </div>
+</aside>

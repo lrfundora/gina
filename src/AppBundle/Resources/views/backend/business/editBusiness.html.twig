@@ -1,0 +1,547 @@
+{% extends 'AppBundle::base_back.html.twig' %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link type="text/css" rel="stylesheet" href="{{ asset('bundles/app/assets/css/animate.css') }}"/>
+    <link type="text/css" rel="stylesheet"
+          href="{{ asset('bundles/app/assets/plugins/revolution-slider/css/settings.css') }}"/>
+    <style>
+        /* div class Animation Change */
+        .banneredit-container {
+            width: 100%;
+            position: relative;
+            padding: 0;
+            margin-bottom: 15px !important;
+        }
+    </style>
+{% endblock stylesheets %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script type="text/javascript"
+            src="{{ asset('bundles/app/assets/plugins/revolution-slider/js/jquery.themepunch.tools.min.js') }}"></script>
+    <script type="text/javascript"
+            src="{{ asset('bundles/app/assets/plugins/revolution-slider/js/jquery.themepunch.revolution.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('bundles/app/assets/js/slider_revolution.js') }}"></script>
+    <script src="{{ asset('bundles/app/backend/vendor/bootstrap-file-input/bootstrap.file-input.js') }}"></script>
+    <script src="{{ asset('bundles/app/backend/vendor/jquery-validation/jquery.validate.min.js') }}"></script>
+    <script>
+        $(function () {
+
+            $('input[type="file"]').bootstrapFileInput();
+            $('.input-group-addon').on('click', function (e) {
+                e.preventDefault();
+            });
+
+            $("#form").validate({
+                rules: {
+                    'form[name]': {
+                        required: true,
+                        minlength: 3,
+                        maxlength: 25
+                    },
+                    'form[slogan]': {
+                        required: true,
+                        minlength: 3,
+                        maxlength: 250
+                    },
+                    'form[address]': {
+                        required: true,
+                        minlength: 3,
+                        maxlength: 250
+                    },
+                    'form[phone]': {
+                        required: false,
+                        minlength: 6,
+                        maxlength: 20
+                    },
+                    'form[email]': {
+                        required: false,
+                        email: true
+                    },
+                    'form[description]': {
+                        required: true,
+                        maxlength: 1000
+                    }
+                },
+                messages: {
+                    'form[name]': {
+                        required: "Este campo no puede quedar vacío.",
+                        minlength: jQuery.validator.format("El campo debe tener al menos {0} caracteres."),
+                        maxlength: jQuery.validator.format("El campo puede tener como máximo {0} caracteres.")
+                    },
+                    'form[slogan]': {
+                        required: "Este campo no puede quedar vacío.",
+                        minlength: jQuery.validator.format("El campo debe tener al menos {0} caracteres."),
+                        maxlength: jQuery.validator.format("El campo puede tener como máximo {0} caracteres.")
+                    },
+                    'form[address]': {
+                        required: "Este campo no puede quedar vacío.",
+                        minlength: jQuery.validator.format("El campo debe tener al menos {0} caracteres."),
+                        maxlength: jQuery.validator.format("El campo puede tener como máximo {0} caracteres.")
+                    },
+                    'form[phone]': {
+                        minlength: jQuery.validator.format("El campo debe tener al menos {0} caracteres."),
+                        maxlength: jQuery.validator.format("El campo puede tener como máximo {0} caracteres.")
+                    },
+                    'form[email]': {
+                        email: "Introduce una dirección de correo electrónico válido."
+                    },
+                    'form[description]': {
+                        required: "Este campo no puede quedar vacío.",
+                        maxlength: jQuery.validator.format("El campo puede tener como máximo {0} caracteres.")
+                    }
+                },
+                submitHandler: function (form) {
+                    form.submit();
+                },
+                errorPlacement: function (error, element) {
+                    $(element)
+                            .closest("form")
+                            .find("label[for='" + element.attr("id") + "']")
+                            .append(error);
+                },
+                errorElement: "span"
+            });
+        });
+
+        $("#uploadImgPublicity").on('click', function (e) {
+            $('#formImgPublicity').submit();
+        });
+
+        $("#uploadImgThumb").on('click', function (e) {
+            $('#formImgThumb').submit();
+        });
+
+        $("#addSch").on('click', function (e) {
+            $('#formSch').submit();
+        });
+
+        $("#updAnimation").on('click', function (e) {
+            $('#formAnimation').submit();
+        });
+
+    </script>
+{% endblock javascripts %}
+
+{% block header %}
+    {% include 'AppBundle:backend/design:header_bar.html.twig' %}
+{% endblock header %}
+
+{% block body %}
+    <div id="wrapper">
+
+        <!-- Breadcrumb -->
+        <div class="normalheader transition animated fadeIn small-header">
+            <div class="hpanel">
+                <div class="panel-body">
+                    <a class="small-header-action" href="#">
+                        <div class="clip-header">
+                            <i class="fa fa-arrow-down"></i>
+                        </div>
+                    </a>
+
+                    <div id="hbreadcrumb" class="pull-right">
+                        <ol class="hbreadcrumb breadcrumb">
+                            <li><a href="{{ path('_admin_index') }}">Inicio</a></li>
+                            <li>
+                                <a href="{{ path('_admin_business') }}">Negocio</a>
+                            </li>
+                            <li class="active">
+                                <span>Editar</span>
+                            </li>
+                        </ol>
+                    </div>
+                    <h2 class="font-light m-b-xs">
+                        panel de control
+                    </h2>
+                    <small>Herramienta administrativa que permite mantener actualizada la información</small>
+                </div>
+            </div>
+        </div>
+        <!-- /Breadcrumb -->
+
+        <!-- Form -->
+        <div class="content animate-panel">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="hpanel">
+                        <div class="panel-heading font-uppercase">
+                            {#<div class="panel-tools">#}
+                            {#<a class="showhide"><i class="fa fa-chevron-up"></i></a>#}
+                            {#</div>#}
+                            edición de negocio
+                        </div>
+                        <div class="panel-body">
+                            <div class="hpanel">
+                                <div class="panel-body">
+                                    <div class="">
+                                        <h3 class="text-uppercase">
+                                            <a href="{{ path('_admin_business') }}" class="btn btn-default" style="margin-top: -5px;">
+                                                <i class="fa fa-arrow-left"></i>
+                                            </a>
+                                            editar negocio
+                                        </h3>
+                                    </div>
+
+                                    <hr class="left-separator">
+
+                                    <div class="row">
+                                        <div class="col-lg-12 animated-panel zoomIn" style="animation-delay: 0.4s;">
+                                            <div class="hpanel">
+                                                <ul class="nav nav-tabs">
+                                                    <li {{ tab=='1' ?'class="active"' :'' }}>
+                                                        <a href="#tab-1" data-toggle="tab" aria-expanded="false">
+                                                            <i class="fa fa-briefcase"></i>
+                                                            Información del negocio
+                                                        </a>
+                                                    </li>
+                                                    <li {{ tab=='2' ?'class="active"' :'' }}>
+                                                        <a href="#tab-2" data-toggle="tab" aria-expanded="false">
+                                                            <i class="fa fa-picture-o"></i>
+                                                            Imágenes de publicidad
+                                                        </a>
+                                                    </li>
+                                                </ul>
+                                                <div class="tab-content">
+                                                    <div id="tab-1" {{ tab=='1' ?'class="tab-pane active"' :'class="tab-pane"' }}>
+                                                        <div class="panel-body">
+                                                            {% for Message in app.session.flashbag.get('infoSuccess') %}
+                                                                <div class="alert alert-success">
+                                                                    <i class="fa fa-smile-o"></i>
+                                                                    {{ Message | raw }}
+                                                                </div>
+                                                                <br/>
+                                                            {% endfor %}
+                                                            {% for Message in app.session.flashbag.get('infoError') %}
+                                                                <div class="alert alert-danger">
+                                                                    <i class="fa fa-frown-o"></i>
+                                                                    {{ Message | raw }}
+                                                                </div>
+                                                                <br/>
+                                                            {% endfor %}
+                                                            <div class="row"
+                                                                 style="background-color: #f1f3f6; border: 1px solid #ddd; margin: 15px 0; padding: 10px 0 10px 0;">
+                                                                {{ form_start(form, {'attr':{'id':'form', 'name':'form'}}) }}
+                                                                <div class="col-lg-6">
+                                                                    <div class="form-group">
+                                                                        {{ form_label(form.name) }}
+                                                                        {{ form_widget(form.name) }}
+                                                                    </div>
+                                                                    <div class="form-group">
+                                                                        {{ form_label(form.slogan) }}
+                                                                        {{ form_widget(form.slogan) }}
+                                                                    </div>
+                                                                    <div class="form-group">
+                                                                        {{ form_label(form.phone) }}
+                                                                        {{ form_widget(form.phone) }}
+                                                                    </div>
+                                                                    <div class="form-group">
+                                                                        {{ form_label(form.email) }}
+                                                                        {{ form_widget(form.email) }}
+                                                                    </div>
+                                                                    <div class="form-group">
+                                                                        {{ form_label(form.address) }}
+                                                                        {{ form_widget(form.address) }}
+                                                                    </div>
+                                                                </div>
+
+                                                                <div class="col-lg-6">
+                                                                    <div class="form-group">
+                                                                        {{ form_label(form.description) }}
+                                                                        {{ form_widget(form.description) }}
+                                                                    </div>
+
+                                                                    <!-- Add Schedule -->
+                                                                    <div class="form-group">
+                                                                        <a type="button" class="btn btn-primary btn-xs"
+                                                                           data-toggle="modal"
+                                                                           data-target="#modalAddSchedule">
+                                                                            <i class="fa fa-plus"></i>
+                                                                            Agregar nuevo horario
+                                                                        </a>
+                                                                    </div>
+                                                                    <!-- /Add Schedule -->
+
+                                                                    <label>
+                                                                        {{ form.schedules | length > 1?'Horarios de trabajo':'Horario de trabajo' }}
+                                                                    </label>
+                                                                    <br/>
+                                                                    {% for schedule in form.schedules %}
+                                                                        <div class="col-lg-12 panel">
+                                                                            <div class="panel-heading">
+                                                                                <label>Horario {{ loop.index }}</label>
+                                                                                <a href="{{ path('_admin_business_sch_delete', {'id':entity.id, 'item':loop.index0}) }}"
+                                                                                   class="btn btn-danger2 btn-xs pull-right">
+                                                                                    <i class="fa fa-trash"></i>
+                                                                                    Eliminar
+                                                                                </a>
+                                                                            </div>
+
+                                                                            <div class="form-group">
+                                                                                <div class="col-lg-4">
+                                                                                    {{ form_widget(schedule.isAllHours) }}
+                                                                                    {{ form_label(schedule.isAllHours) }}
+                                                                                </div>
+                                                                                <div class="col-lg-8">
+                                                                                    <div class="input-group">
+                                                                                        <span class="input-group-addon">De</span>
+                                                                                        {{ form_label(schedule.timeStart) }}
+                                                                                        {{ form_widget(schedule.timeStart) }}
+                                                                                        <span class="input-group-addon">a</span>
+                                                                                        {{ form_label(schedule.timeEnd) }}
+                                                                                        {{ form_widget(schedule.timeEnd) }}
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="form-group">
+                                                                                <div class="col-lg-4">
+                                                                                    {{ form_widget(schedule.isAllDays) }}
+                                                                                    {{ form_label(schedule.isAllDays) }}
+                                                                                </div>
+                                                                                <div class="col-lg-8">
+                                                                                    <div class="input-group">
+                                                                                        <span class="input-group-addon">De</span>
+                                                                                        {{ form_label(schedule.dayStart) }}
+                                                                                        {{ form_widget(schedule.dayStart) }}
+                                                                                        <span class="input-group-addon">a</span>
+                                                                                        {{ form_label(schedule.dayEnd) }}
+                                                                                        {{ form_widget(schedule.dayEnd) }}
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="form-group">
+                                                                                <div class="col-lg-12"></div>
+                                                                            </div>
+                                                                        </div>
+                                                                    {% endfor %}
+                                                                </div>
+                                                                <div class="col-sm-12 fixed-box">
+                                                                    {{ form_widget(form.update) }}
+                                                                    {{ form_end(form) }}
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                        <!-- Modal Schedule -->
+                                                        <div class="modal fade hmodal"
+                                                             id="modalAddSchedule"
+                                                             tabindex="-1" role="dialog"
+                                                             aria-hidden="true">
+                                                            <div class="modal-dialog">
+                                                                <div class="modal-content">
+                                                                    <div class="color-line"></div>
+                                                                    <div class="modal-header">
+                                                                        <h4 class="modal-title text-uppercase">
+                                                                            Agregar nuevo horario</h4>
+                                                                    </div>
+                                                                    <div class="modal-body">
+                                                                        <div class="row">
+                                                                            {{ form_start(formSch, {'attr':{'id':'formSch'}}) }}
+                                                                            <div class="col-lg-12 form-group">
+                                                                                <div class="form-group">
+                                                                                    <div class="col-lg-12">
+                                                                                        {{ form_widget(formSch.isAllHours) }}
+                                                                                        {{ form_label(formSch.isAllHours) }}
+                                                                                    </div>
+                                                                                    <div class="col-lg-12">
+                                                                                        <div class="input-group">
+                                                                                            <span class="input-group-addon">De</span>
+                                                                                            {{ form_label(formSch.timeStart) }}
+                                                                                            {{ form_widget(formSch.timeStart) }}
+                                                                                            <span class="input-group-addon">a</span>
+                                                                                            {{ form_label(formSch.timeEnd) }}
+                                                                                            {{ form_widget(formSch.timeEnd) }}
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="col-lg-12 form-group">
+                                                                                <div class="form-group">
+                                                                                    <div class="col-lg-12">
+                                                                                        {{ form_widget(formSch.isAllDays) }}
+                                                                                        {{ form_label(formSch.isAllDays) }}
+                                                                                    </div>
+                                                                                    <div class="col-lg-12">
+                                                                                        <div class="input-group">
+                                                                                            <span class="input-group-addon">De</span>
+                                                                                            {{ form_label(formSch.dayStart) }}
+                                                                                            {{ form_widget(formSch.dayStart) }}
+                                                                                            <span class="input-group-addon">a</span>
+                                                                                            {{ form_label(formSch.dayEnd) }}
+                                                                                            {{ form_widget(formSch.dayEnd) }}
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                            {{ form_end(formSch) }}
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="modal-footer">
+                                                                        <button type="button"
+                                                                                class="btn btn-default"
+                                                                                data-dismiss="modal">
+                                                                            Cancelar
+                                                                        </button>
+                                                                        <button id="addSch"
+                                                                                type="button"
+                                                                                class="btn btn-primary">
+                                                                            Agregar
+                                                                        </button>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <!-- /Modal Schedule -->
+                                                    </div>
+                                                    <div id="tab-2" {{ tab=='2' ?'class="tab-pane active"' :'class="tab-pane"' }}>
+                                                        <div class="panel-body">
+                                                            <div class="row">
+                                                                <div class="col-sm-12">
+                                                                    {% for Message in app.session.flashbag.get('imageSuccess') %}
+                                                                        <div class="alert alert-success">
+                                                                            <i class="fa fa-smile-o"></i>
+                                                                            {{ Message | raw }}
+                                                                        </div>
+                                                                        <br/>
+                                                                    {% endfor %}
+                                                                    {% for Message in app.session.flashbag.get('imageError') %}
+                                                                        <div class="alert alert-danger">
+                                                                            <i class="fa fa-frown-o"></i>
+                                                                            {{ Message | raw }}
+                                                                        </div>
+                                                                        <br/>
+                                                                    {% endfor %}
+                                                                    <p class="alert alert-info">
+                                                                        <i class="fa fa-exclamation-circle"></i>
+                                                                        Ajustarse a las dimensiones de cada imagen
+                                                                        garantiza
+                                                                        la optima experiencia del diseño.
+                                                                    </p>
+
+                                                                    <div id="img1" class="row"
+                                                                         style="background-color: #f1f3f6; border: 1px solid #ddd; margin: 15px 0; padding: 10px 0 10px 0;">
+                                                                        <div class="col-sm-12">
+
+                                                                            <!-- Form Image Publicity -->
+                                                                            <div class="banneredit-container">
+                                                                                <div id="banneredit">
+                                                                                    <ul>
+                                                                                        <!-- SLIDES  -->
+                                                                                        <li data-transition="fade"
+                                                                                            data-slotamount="1"
+                                                                                            data-masterspeed="300"
+                                                                                            data-delay="1">
+
+                                                                                            <!-- BLANK IMAGE -->
+
+                                                                                        </li>
+                                                                                        <li data-transition="{{ entity.imgPublicityAnimation.type }}"
+                                                                                            data-slotamount="5"
+                                                                                            data-masterspeed="500"
+                                                                                            data-delay="2000">
+
+                                                                                            <!-- COVER IMAGE -->
+                                                                                            <img src="{{ asset(entity.imgPublicity.path) }}"
+                                                                                                 alt=""
+                                                                                                 data-bgfit="cover"
+                                                                                                 data-bgposition="left top"
+                                                                                                 data-bgrepeat="no-repeat">
+                                                                                        </li>
+                                                                                        <!-- /SLIDES -->
+                                                                                    </ul>
+                                                                                </div>
+                                                                            </div>
+
+                                                                            <div class="row">
+                                                                                <div class="col-lg-7">
+                                                                                    {{ form_start(formImgPublicity, {'attr':{'id':'formImgPublicity'}}) }}
+                                                                                    <div class="input-group bootstrap-touchspin">
+                                                                                        {{ form_label(formImgPublicity.file) }}
+                                                                                        {{ form_widget(formImgPublicity.file, {'attr':{'title':'Selecciona una imagen de publicidad (1300x500)'}}) }}
+                                                                                        <span id="uploadImgPublicity"
+                                                                                              class="input-group-addon bootstrap-touchspin-postfix btn btn-default">
+                                                                                            <strong>
+                                                                                                <i class="fa fa-upload"></i>
+                                                                                                Actualizar imagen
+                                                                                            </strong>
+                                                                                        </span>
+                                                                                    </div>
+                                                                                    {{ form_end(formImgPublicity) }}
+                                                                                </div>
+                                                                                <div class="col-lg-5">
+                                                                                    {{ form_start(formAnimation, {'attr':{'id':'formAnimation'}}) }}
+                                                                                    <div class="input-group bootstrap-touchspin">
+                                                                                        <span class="input-group-addon">
+                                                                                            <strong></strong>Animación:
+                                                                                        </span>
+                                                                                        {{ form_widget(formAnimation) }}
+                                                                                        <span id="updAnimation"
+                                                                                              class="input-group-addon bootstrap-touchspin-postfix btn btn-default">
+                                                                                            <strong>
+                                                                                                <i class="fa fa-exchange"></i>
+                                                                                                Cambiar
+                                                                                            </strong>
+                                                                                        </span>
+                                                                                    </div>
+                                                                                    {{ form_end(formAnimation) }}
+                                                                                </div>
+                                                                                {#<div class="col-sm-1"></div>#}
+                                                                            </div>
+                                                                            <!-- /Form Image Publicity -->
+
+                                                                            <hr class="left-separator"/>
+
+                                                                            <!-- Form Image Thumb -->
+                                                                            <img src="{{ asset(entity.imgThumb.path) }}"
+                                                                                 class="img-thumbnail m-b center-block"
+                                                                                 width="40%"
+                                                                                 alt="">
+
+                                                                            <div class="row">
+                                                                                <div class="col-lg-3"></div>
+                                                                                <div class="col-lg-6">
+                                                                                    {{ form_start(formImgThumb, {'attr':{'id':'formImgThumb'}}) }}
+                                                                                    <div class="input-group bootstrap-touchspin">
+                                                                                        {{ form_label(formImgThumb.file) }}
+                                                                                        {{ form_widget(formImgThumb.file, {'attr':{'title':'Selecciona una imagen de presentación (400x250)'}}) }}
+                                                                                        <span id="uploadImgThumb"
+                                                                                              class="input-group-addon bootstrap-touchspin-postfix btn btn-default">
+                                                                                            <strong>
+                                                                                                <i class="fa fa-upload"></i>
+                                                                                                Actualizar imagen
+                                                                                            </strong>
+                                                                                        </span>
+                                                                                    </div>
+                                                                                    {{ form_end(formImgThumb) }}
+                                                                                </div>
+                                                                                <div class="col-lg-3"></div>
+                                                                            </div>
+                                                                            <!-- /Form Image Thumb -->
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="img2"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /Form -->
+
+        <!-- Footer -->
+        {% include 'AppBundle:backend/design:footer_bar.html.twig' %}
+        <!-- /Footer -->
+
+    </div>
+
+{% endblock body %}

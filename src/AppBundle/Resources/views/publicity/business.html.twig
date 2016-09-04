@@ -1,0 +1,77 @@
+{% extends 'AppBundle::base_front.html.twig' %}
+
+{% block header %}
+    {% include 'AppBundle:design:header_bar.html.twig' %}
+{% endblock header %}
+
+{% block body %}
+    <div id="wrapper">
+
+        {#{% for business in arrBusiness %}#}
+        <!-- PAGE TITLE -->
+        <header id="page-title">
+            <div class="container">
+                {% if business | length > 1 %}
+                    <h1>Negocios</h1>
+                {% else %}
+                    <h1>Negocio</h1>
+                {% endif %}
+                <ul class="breadcrumb">
+                    {{ wo_render_breadcrumbs() }}
+                </ul>
+            </div>
+        </header>
+
+        <section class="container">
+            {% set i = 0 %}
+            <!-- BUSINESS INFO -->
+            {% for business in business %}
+                <div class="row">
+                    <div class="col-sm-5">
+                        <ul class="isotope">
+                            <li class="isotope-item photography">
+                                <div class="item-box">
+                                    <figure>
+                                        <img class="img-responsive"
+                                             src="{{ asset(business.imgThumb.path) }}" width="100%" height="100%"
+                                             alt="">
+                                    </figure>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="col-sm-7">
+                        <h1>{{ business.name }}</h1>
+
+                        <h3>{{ business.slogan }}</h3>
+
+                        <p>{{ business.name }}, {{ business.description }}</p>
+
+                        <p>
+                            Actualmente cuenta con <strong><a
+                                        href="{{ url('_business_products',{'business':business.slug}) }}">{{ arrNP[i] }}
+                                    productos</a></strong> agrupados en <strong><a
+                                        href="{{ url('_business_categories',{'business':business.slug}) }}">{{ arrNC[i] }}
+                                    categorías</a></strong>, destinados a satisfacer a todos los clientes.
+                        </p>
+
+                        <p><strong>Horario:</strong>
+                            {% for schedule in business.schedules %}
+                                <br/>{{ schedule.info }}
+                            {% endfor %}
+                        </p>
+                        {% set i = i+1 %}
+                    </div>
+                </div>
+                <hr class="half-margins"/>
+            {% endfor %}
+            <!-- /BUSINESS INFO -->
+
+        </section>
+    </div>
+    <!-- /WRAPPER -->
+{% endblock body %}
+
+{% block footer %}
+    {% include 'AppBundle:design:footer_bar.html.twig' %}
+{% endblock footer %}

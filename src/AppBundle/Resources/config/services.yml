@@ -1,0 +1,15 @@
+services:
+    twig.extension.text:
+        class: Twig_Extensions_Extension_Text
+        tags:
+          - { name: twig.extension }
+
+    # App Config class
+    app.query:
+        class: AppBundle\Utils\serviceAppQuery
+        arguments: [ @doctrine.orm.default_entity_manager ]
+
+    # App Utils class
+
+    app.utils:
+        class: AppBundle\Utils\Utils

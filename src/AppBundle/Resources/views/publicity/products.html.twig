@@ -1,0 +1,126 @@
+{% extends 'AppBundle::base_front.html.twig' %}
+
+{% block header %}
+    {% include 'AppBundle:design:header_bar.html.twig' %}
+{% endblock header %}
+
+{% block body %}
+
+    <!-- OrderBy JS Script -->
+    <script type="text/javascript" src="{{ asset('bundles/app/js/select_order.js') }}"></script>
+
+    <!-- WRAPPER -->
+    <div id="wrapper">
+
+        <div id="shop">
+
+            <!-- PAGE TITLE -->
+            <header id="page-title">
+                <div class="container">
+                    <h1>Productos</h1>
+                    <ul class="breadcrumb">
+                        {{ wo_render_breadcrumbs() }}
+                    </ul>
+                </div>
+            </header>
+
+
+            <section class="container">
+
+                {% if arrProducts is not empty %}
+
+                    <div class="row top-shop-option">
+                        <div class="col-sm-7 col-md-9">
+                            {% include 'AppBundle:pagination:view_show_results.html.twig' with {'arrayData':arrProducts} %}
+                        </div>
+                        <div class="col-sm-5 col-md-3">
+                            {% include 'AppBundle:order:order.html.twig' with {'arrOptions': orderData} %}
+                        </div>
+                    </div>
+
+
+                    <div class="row">
+
+                        <!-- items -->
+                        {% for product in arrProducts %}
+                            <div class="col-sm-4 col-md-3">
+                                <div class="item-box">
+                                    <figure>
+                                        <a class="item-hover"
+                                           href="{{ url('_business_products_details', {'business':product.category.business.slug, 'id':product.id}) }}">
+                                            <span class="overlay color2"></span>
+										<span class="inner">
+											<span class="block fa fa-eye fsize20"></span>
+											VER <strong>DETALLES</strong>
+										</span>
+                                        </a>
+                                        <img class="img-responsive"
+                                             src="{{ asset(product.photos[0].path) }}"
+                                             width="100%" alt="">
+                                    </figure>
+                                    <div class="item-box-desc">
+                                    <span style="color: #999">
+                                        <a class="styleColor"
+                                           href="{{ url('_business_categories', {'business':product.category.business.slug, 'find':product.category.slug}) }}">{{ product.category.name | upper }}
+                                        </a>
+                                        <br/>
+                                        <a class="styleColor"
+                                           href="{{ url('_business_products_details', {'business':product.category.business.slug, 'id':product.id}) }}">
+                                            {{ product.name }}
+                                        </a>
+                                        <br/>
+                                        Precio:
+                                        {% if product.isOffer %}
+                                            {% set newprice = product.price - product.price * product.discount / 100 %}
+                                            <span class="styleSecondColor">
+                                                ${{ newprice | number_format(2, '.', ',') }}
+                                            </span>
+                                            <span style="font-size:12px; color: #777; padding-left: 2px; text-decoration: line-through">
+                                                ${{ product.price }}
+                                            </span>
+                                            <span class="styleSecondColor">
+                                                <strong style="padding-left: 5px">
+                                                    -{{ product.discount }}%
+                                                </strong>
+                                            </span>
+                                        {% else %}
+                                            <span class="styleSecondColor">
+                                                ${{ product.price | number_format(2, '.', ',') }}
+                                            </span>
+                                            <span style="font-size:12px; color: #777; padding-left: 2px;">
+                                                &emsp;
+                                            </span>
+                                        {% endif %}
+                                    </span>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                        <!-- /items -->
+
+                    </div>
+
+                    <!-- PAGINATION -->
+                    {% include 'AppBundle:pagination:view_paginator.html.twig' with {'arrayData':arrProducts} %}
+                    <!-- /PAGINATION -->
+
+                {% else %}
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <p class="fsize20">
+                                No hemos encontrado <strong>resultados</strong> !!!
+                            </p>
+                        </div>
+                    </div>
+                {% endif %}
+            </section>
+
+        </div>
+
+    </div>
+    <!-- /WRAPPER -->
+{% endblock body %}
+
+{% block footer %}
+    {% include 'AppBundle:design:footer_bar.html.twig' %}
+{% endblock footer %}

@@ -1,0 +1,24 @@
+{% extends 'AppBundle::base_back.html.twig' %}
+
+{% block icon %}
+    <link rel="icon" type="image/png" href="{{ asset('bundles/app/assets/images/icon_error.png') }}"/>
+{% endblock %}
+
+{% block title %}
+    Error 403
+{% endblock %}
+
+{% block body %}
+
+    <div class="error-container">
+        <i class="pe-7s-way text-danger big-icon"></i>
+
+        <h1 class="text-danger">403</h1>
+        <strong>Acceso denegado.</strong>
+        <p>
+            Lo sentimos pero no tiene permiso para estar aquí.
+        </p>
+
+    </div>
+
+{% endblock body %}

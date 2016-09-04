@@ -1,0 +1,162 @@
+{% extends 'AppBundle::base_back.html.twig' %}
+
+{#{% block stylesheets %}#}
+    {#{{ parent() }}#}
+    {#<link rel="stylesheet"#}
+          {#href="{{ asset('bundles/app/backend/vendor/bootstrap-datepicker-master/dist/css/bootstrap-datepicker3.min.css') }}"/>#}
+{#{% endblock stylesheets %}#}
+
+{% block javascripts %}
+    {{ parent() }}
+    {#<script src="{{ asset('bundles/app/backend/vendor/moment/min/moment.min.js') }}"></script>#}
+    {#<script src="{{ asset('bundles/app/backend/vendor/bootstrap-datepicker-master/dist/js/bootstrap-datepicker.min.js') }}"></script>#}
+    <script src="{{ asset('bundles/app/backend/vendor/bootstrap-file-input/bootstrap.file-input.js') }}"></script>
+    <script src="{{ asset('bundles/app/backend/vendor/jquery-validation/jquery.validate.min.js') }}"></script>
+    <script>
+        $(function () {
+
+//            $('#form_schedules_0_timeStart').datepicker({});
+
+            $('input[type="file"]').bootstrapFileInput();
+            $('.input-group-addon').on('click', function (e) {
+                e.preventDefault();
+            });
+
+            $("#form").validate({
+                rules: {
+                    'form_business': {
+                        required: true,
+                    }
+                },
+                messages: {
+                    'form_business': {
+                        required: "Debe seleccionar un megocio."
+                    }
+                },
+                submitHandler: function (form) {
+                    form.submit();
+                },
+                errorPlacement: function (error, element) {
+                    $(element)
+                            .closest("form")
+                            .find("label[for='" + element.attr("id") + "']")
+                            .append(error);
+                },
+                errorElement: "span"
+            });
+        });
+    </script>
+{% endblock javascripts %}
+
+{% block header %}
+    {% include 'AppBundle:backend/design:header_bar.html.twig' %}
+{% endblock header %}
+
+{% block body %}
+    <div id="wrapper">
+
+    <!-- Breadcrumb -->
+    <div class="normalheader transition animated fadeIn small-header">
+        <div class="hpanel">
+            <div class="panel-body">
+                <a class="small-header-action" href="#">
+                    <div class="clip-header">
+                        <i class="fa fa-arrow-down"></i>
+                    </div>
+                </a>
+
+                <div id="hbreadcrumb" class="pull-right">
+                    <ol class="hbreadcrumb breadcrumb">
+                        <li><a href="{{ path('_admin_index') }}">Inicio</a></li>
+                        <li>
+                            <a href="{{ path('_admin_product') }}">Producto</a>
+                        </li>
+                        <li class="active">
+                            <span>Agregar</span>
+                        </li>
+                    </ol>
+                </div>
+                <h2 class="font-light m-b-xs">
+                    panel de control
+                </h2>
+                <small>Herramienta administrativa que permite mantener actualizada la información</small>
+            </div>
+        </div>
+    </div>
+    <!-- /Breadcrumb -->
+
+    <!-- Form -->
+    <div class="content animate-panel">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="hpanel">
+                <div class="panel-heading font-uppercase">
+                    Agregar nuevo producto
+                </div>
+                <div class="panel-body">
+                    <div class="hpanel">
+                        <div class="panel-body">
+                            <div class="">
+                                <h3 class="text-uppercase">
+                                    <a href="{{ path('_admin_product') }}" class="btn btn-default" style="margin-top: -5px;">
+                                        <i class="fa fa-arrow-left"></i>
+                                    </a>
+                                    seleccionar negocio
+                                </h3>
+                            </div>
+
+                            <hr class="left-separator">
+
+                            <div class="row">
+                                <div class="col-lg-3"></div>
+                                <div class="col-lg-6"
+                                     style="background-color: #f1f3f6; border: 1px solid #ddd; margin: 15px 0; padding: 10px;">
+                                    <form id="form"
+                                          name="form"
+                                          action="{{ path('_admin_product_add2') }}"
+                                          method="post">
+
+                                        <label class="control-label required"
+                                               for="form_business"
+                                               aria-required="true">Seleciona
+                                            un negocio</label>
+                                        <select id="form_business"
+                                                class="form-control m-b"
+                                                name="form_business">
+                                            <option value="">{{ business | length > 0?'Seleccionar': 'No hay negoocios agregados...' }}</option>
+                                            {% for item in business %}
+                                                <option value="{{ item.id }}">{{ item.name }}</option>
+                                            {% endfor %}
+                                        </select>
+
+                                        <div class="text-right">
+                                            <ul class="list-inline">
+                                                <li>
+                                                    <a href="{{ url('_admin_product') }}"
+                                                       class="btn btn-default">
+                                                        Cancelar
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <input type="submit" class="btn btn-success" value="Siguiente >">
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </form>
+                                </div>
+                                <div class="col-lg-3"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /Form -->
+
+        <!-- Footer -->
+        {% include 'AppBundle:backend/design:footer_bar.html.twig' %}
+        <!-- /Footer -->
+
+    </div>
+
+{% endblock body %}

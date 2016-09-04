@@ -1,0 +1,132 @@
+{% extends 'AppBundle::base_front.html.twig' %}
+
+{% block header %}
+    {% include 'AppBundle:design:header_bar.html.twig' %}
+{% endblock header %}
+
+{% block body %}
+
+    <!-- OrderBy JS Script -->
+    <script type="text/javascript" src="{{ asset('bundles/app/js/select_order.js') }}"></script>
+
+    <!-- WRAPPER -->
+    <div id="wrapper">
+
+        <!-- PAGE TITLE -->
+        <header id="page-title">
+            <div class="container">
+                <h1>Ofertas</h1>
+                <ul class="breadcrumb">
+                    {{ wo_render_breadcrumbs() }}
+                </ul>
+            </div>
+        </header>
+
+        <div class="container magazine">
+
+            <div class="row">
+
+                <!-- center column -->
+                <div class="col-md-12">
+                    {% if offers is not empty %}
+                        <!-- ORDER BY -->
+                        <div class="row">
+                            <!-- Results -->
+                            <div class="col-md-6 text-left">
+                                <p class="hidden-xs pull-left nomargin padding20">
+                                    {% include 'AppBundle:pagination:view_show_results.html.twig' with {'arrayData': offers} %}
+                                </p>
+                            </div>
+                            <!-- Select Order -->
+                            <div class="col-md-6 responsive-text-center text-right">
+                                {% include 'AppBundle:order:order.html.twig' with {'arrOptions': orderData} %}
+                            </div>
+
+                        </div>
+                        <!-- /ORDER BY -->
+
+                        <hr class="half-margins"/>
+                        <!-- separator -->
+
+                        {% for product in offers %}
+                            <!-- offer summary -->
+                            <div class="row">
+                                <div class="col-md-3 text-center isotope">
+                                    <div class="isotope-item photography">
+                                        <div class="item-box">
+                                            <a href="{{ url('_business_products_details', {'business':product.category.business.slug, 'id':product.id}) }}">
+                                                <img alt="" class="img-responsive"
+                                                     src="{{ asset(product.photos[0].path) }}"
+                                                     width="100%"/>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-9">
+                                    <ul class="list-style-none">
+                                        <li>
+                                            <p></p>
+                                        </li>
+                                        <li>
+                                            Lugar:
+                                            <a class="styleColor"
+                                               href="{{ url('_business', {'business':product.category.business.slug}) }}">
+                                                {{ product.category.business.name }}
+                                            </a>
+                                        </li>
+                                        <li>
+                                            Categoría:
+                                            <a class="styleColor"
+                                               href="{{ url('_business_categories', {'business':product.category.business.slug, 'find':product.category.slug}) }}">
+                                                {{ product.category.name }}
+                                            </a>
+                                        </li>
+                                        <li>
+                                            Producto:
+                                            <a class="styleColor"
+                                               href="{{ url('_business_products_details', {'business':product.category.business.slug, 'id':product.id}) }}">
+                                                {{ product.name }}
+                                            </a>
+                                        </li>
+                                        <li>
+                                            Precio:
+                                            {% set newprice = product.price - product.price * product.discount / 100 %}
+                                            <small class="styleSecondColor">
+                                                ${{ newprice | number_format(2, '.', ',') }}</small>
+                                            <small style="text-decoration: line-through">
+                                                ${{ product.price }}</small>
+                                        </li>
+                                        <li>
+                                            Descuento:
+                                            <small class="styleSecondColor">{{ product.discount }}%</small>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <!-- /offer summary -->
+
+                            <hr class="half-margins"/><!-- separator -->
+
+                        {% endfor %}
+
+                        <!-- PAGINATION -->
+                        {% include 'AppBundle:pagination:view_paginator.html.twig' with {'arrayData':offers} %}
+                        <!-- /PAGINATION -->
+                    {% else %}
+                        <p class="fsize30">
+                            No hay resultados para mostrar !!!
+                        </p>
+                    {% endif %}
+                </div>
+                <!-- /center column -->
+
+            </div>
+
+        </div>
+    </div>
+    <!-- /WRAPPER -->
+{% endblock body %}
+
+{% block footer %}
+    {% include 'AppBundle:design:footer_bar.html.twig' %}
+{% endblock footer %}

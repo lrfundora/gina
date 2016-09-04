@@ -1,0 +1,216 @@
+{% extends 'AppBundle::base_front.html.twig' %}
+
+{% block header %}
+    {% include 'AppBundle:design:header_bar.html.twig' %}
+{% endblock header %}
+
+{% block body %}
+    <div id="wrapper">
+
+        <!-- PAGE TITLE -->
+        <header id="page-title">
+            <div class="container">
+                <h1>Detalles</h1>
+                <ul class="breadcrumb">
+                    {{ wo_render_breadcrumbs() }}
+                </ul>
+            </div>
+        </header>
+
+        <section class="container">
+
+            {% if prodDetail is not empty %}
+                <div class="row">
+                    <div class="col-sm-5 col-md-5">
+                        <ul class="isotope">
+                            <li class="isotope-item photography">
+                                <div class="item-box">
+                                    <div class="owl-carousel controlls-over product-image"
+                                         data-plugin-options='{"items": 1, "singleItem": true, "navigation": true, "pagination": true, "transitionStyle":"fadeUp"}'>
+                                        {% for photo in prodDetail.photos %}
+                                            <div>
+                                                <img alt="" class="img-responsive"
+                                                     src="{{ asset(photo.path) }}"
+                                                     width="100%">
+                                            </div>
+                                        {% endfor %}
+                                    </div>
+                                    <div class="item-title text-center">
+                                        <a href="{{ url('_business_products_comment',{'business':prodDetail.category.business.slug, 'id':prodDetail.id}) }}"
+                                           class="btn btn-info btn-xs">
+                                            <i class="fa fa-comments-o"></i>
+                                            {% if nComments == 1 %}
+                                                1 Comentario
+                                            {% else %}
+                                                {{ nComments }} Comentarios
+                                            {% endif %}
+                                        </a>
+                                        <a href="{{ url('_business_products_comment',{'business':prodDetail.category.business.slug, 'id':prodDetail.id }) }}#myComment"
+                                           class="btn btn-primary btn-xs">
+                                            <i class="fa fa-thumbs-o-down fa-rotate-180"></i>
+                                            Comenta y danos tu opinión!
+                                        </a>
+                                    </div>
+                                    <br>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="col-sm-7 col-md-7">
+
+                        <!-- product detail -->
+
+                    <span class="block fsize20">
+                       {{ prodDetail.name }}
+                    </span>
+
+                        <!-- product price -->
+                        {% if prodDetail.discount > 0 %}
+                            <div class="productRowInfo">
+                                <span style="color: #999">Precio:</span>
+                                {% set newprice = prodDetail.price - prodDetail.price * prodDetail.discount / 100 %}
+                                <span class="price styleSecondColor fsize20">${{ newprice | number_format(2, '.', ',') }}</span>
+                                <span style="color: #555; text-decoration: line-through;">${{ prodDetail.price }}</span>
+                            </div>
+                            <br/>
+                            <div class="productRowInfo">
+                                <span class="fsize15" style="color: #999">
+                                    <strong>
+                                        OFERTA:
+                                    </strong>
+                                </span><br/>
+                                <span style="color: #999">Descuento:</span>
+                                <span class="price styleSecondColor fsize15">{{ prodDetail.discount }}%</span>
+                            </div>
+                            <div class="productRowInfo">
+                                <span style="color: #999">Comienza:</span>
+                                <span class="fsize15" style="color: #555">{{ prodDetail.publicated | date('d/m/Y')}}</span>
+                            </div>
+                            <div class="productRowInfo">
+                                <span style="color: #999">Termina:</span>
+                                <span class="price styleSecondColor fsize15">{{ prodDetail.expired | date('d/m/Y') }}</span>
+                            </div>
+                            <div class="productRowInfo">
+                                <span style="color: #999">Condiciones:</span>
+                                <span class="fsize15" style="color: #555">{{ prodDetail.conditions==null?'Sin condiciones':prodDetail.conditions }}</span>
+                            </div>
+                        {% else %}
+                            <div class="productRowInfo">
+                                <span style="color: #999">Precio:</span>
+                                <span class="price styleSecondColor fsize20">${{ prodDetail.price | number_format(2, '.', ',') }}</span>
+                            </div>
+                        {% endif %}
+
+                        <div class="productRowInfo" style="color: #555">
+                            <br/>
+                        <span class="fsize15 styleColor" style="color: #999">
+                            <strong>
+                                UBICACIÓN:
+                            </strong>
+                        </span>
+                        <span class="block">
+                            <span class="styleColor" style="color: #999">Lugar:</span>
+                            <a class="styleColor"
+                               href="{{ url('_business', {'find':prodDetail.category.business.slug}) }}">
+                                {{ prodDetail.category.business.name }}
+                            </a>
+                        </span>
+                        <span class="block">
+                            <span style="color: #999">Categoría:</span>
+                            <a class="styleColor"
+                               href="{{ url('_business_categories', {'business':prodDetail.category.business.slug, 'find':prodDetail.category.slug}) }}">
+                                {{ prodDetail.category.name }}
+                            </a>
+                        </span>
+                        </div>
+                        <!-- /product price -->
+
+                        <!-- product description -->
+                        <div class="desc">
+                            <br/>
+                        <span class="fsize15 styleColor" style="color: #999">
+                            <strong>
+                                DESCRIPCIÓN:
+                            </strong>
+                        </span><br/>
+
+                            <p style="color: #555">
+                                {{ prodDetail.description }}
+                            </p>
+                        </div>
+                        <!-- /product description -->
+
+                        <!-- product detail -->
+
+                    </div>
+                </div>
+
+
+                <hr/>
+
+
+                <!-- RELATED -->
+                <h2>Productos <strong>Relacionados</strong></h2>
+
+                <div class="row">
+                    {% for product in prodRelated %}
+                        {% if product.id != prodDetail.id %}
+                            <div class="col-sm-3 col-md-2"><!-- item -->
+                                <div class="item-box">
+                                    <figure>
+                                        <a class="item-hover"
+                                           href="{{ url('_business_products_details', {'business':product.category.business.slug, 'id':product.id}) }}">
+                                            <span class="overlay color2"></span>
+										<span class="inner">
+											<span class="block fa fa-eye fsize20"></span>
+											VER <strong>DETALLES</strong>
+										</span>
+                                        </a>
+                                        <img class="img-responsive" src="{{ asset(product.photos[0].path) }}"
+                                             width="100%"
+                                             alt="">
+                                    </figure>
+
+                                    <div class="item-box-desc">
+                                        <a class="styleColor fsize12"
+                                           href="{{ url('_business_products_details', {'business':product.category.business.slug, 'id':product.id}) }}">
+                                            {{ product.name }}
+                                        </a>
+
+                                        <div class="productRowInfo">
+                                            <span class="fsize11">Precio:</span>
+                                            {% if product.isOffer %}
+                                                {% set newprice = product.price - product.price * product.discount / 100 %}
+                                                <span class="price styleSecondColor fsize12">${{ newprice | number_format(2, '.', ',') }}</span>
+                                                <span class="fsize11"
+                                                      style="color: #999; text-decoration: line-through;">${{ product.price }}</span>
+                                            {% else %}
+                                                <span class="price styleSecondColor fsize12">${{ product.price | number_format(2, '.', ',') }}</span>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+                <!-- /RELATED -->
+
+            {% else %}
+                <div class="row">
+                    <div class="col-sm-12">
+                        <p class="fsize20">
+                            No hemos encontrado resultados para el "<strong>producto solicitado</strong>" !!!
+                        </p>
+                    </div>
+                </div>
+            {% endif %}
+        </section>
+
+    </div>
+    <!-- /WRAPPER -->
+{% endblock body %}
+
+{% block footer %}
+    {% include 'AppBundle:design:footer_bar.html.twig' %}
+{% endblock footer %}

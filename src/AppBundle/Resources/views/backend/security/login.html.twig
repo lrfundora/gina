@@ -1,0 +1,71 @@
+{% extends 'AppBundle::base_back.html.twig' %}
+
+{% block body %}
+
+    <!--[if lt IE 7]>
+    <p class="alert alert-danger">Esta usando un navegador <strong>desactualizado</strong>. Por favor, <a
+            href="http://browsehappy.com/">actualice el navegador</a> para disfrutar de la máxima experiencia.</p>
+    <![endif]-->
+
+    <div class="color-line"></div>
+
+    <div class="back-link">
+        <a href="{{ url('_home') }}" class="btn btn-outline btn-primary">
+            <i class="fa fa-arrow-left"></i>
+            Regrasar a la vista cliente</a>
+    </div>
+
+    <div class="login-container">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="text-center m-b-md">
+                    <h5>BIENVENIDO</h5>
+                    <h3>
+                        Panel de control
+                    </h3>
+                </div>
+                <div class="hpanel">
+                    <div class="panel-body">
+                        {% for Message in app.session.flashbag.get('loginError') %}
+                            <p class="alert alert-danger">
+                                <span class="fa fa-frown-o"></span>
+                                {{ Message | raw }}
+                            </p>
+                            <br/>
+                        {% endfor %}
+                        <form id="loginForm" action="{{ url('_check') }}" method="post">
+                            <div class="form-group">
+                                <label class="hidden control-label" for="username">Usuario</label>
+                                <input type="text" placeholder="Usuario" title="Entre su nombre de usuario"
+                                       required="" value="{{ last_username }}" id="username" name="_username"
+                                       class="form-control">
+                            </div>
+                            <div class="form-group">
+                                <label class="hidden control-label" for="password">Contraseña</label>
+                                <input type="password" title="Entre su contraseña" placeholder="Contraseña"
+                                       required="" value="" id="password" name="_password" class="form-control">
+                            </div>
+                            <div class="checkbox">
+                                <label style="margin-left: -20px">
+                                    <input type="checkbox" id="remember_me" name="_remember_me" class="i-checks"/>
+                                    No cerrar sesión
+                                </label>
+                                <p class="help-block small">(Marque esta opción si usa un ordenador personal)</p>
+                            </div>
+                            <button class="btn btn-primary btn-block">Iniciar sesión</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12 text-center">
+                {% if 'now'|date('Y') <= 2015 %}
+                    &copy; 2015 {{ appConfig.name }}. Todos los derechos reservados.
+                {% else %}
+                    &copy; 2015 - {{ 'now'|date('Y') }} {{ appConfig.name }}. Todos los derechos reservados.
+                {% endif %}
+            </div>
+        </div>
+    </div>
+{% endblock body %}

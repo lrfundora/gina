@@ -1,0 +1,254 @@
+{% extends 'AppBundle::base_front.html.twig' %}
+
+{% block header %}
+    {% include 'AppBundle:design:header_bar.html.twig' %}
+{% endblock header %}
+
+{% block body %}
+
+    {% for app in data %}
+        <!-- WRAPPER -->
+        <div id="wrapper">
+
+            <!-- REVOLUTION SLIDER -->
+            <div class="fullwidthbanner-container roundedcorners">
+                <div class="fullwidthbanner">
+                    <ul>
+                        <!-- SLIDES  -->
+                        {% for business in app.business %}
+                            {% include 'AppBundle:design/animation:'~business.imgPublicityAnimation.type~'.html.twig' %}
+                        {% endfor %}
+                        <!-- /SLIDES -->
+                    </ul>
+                    <div class="tp-bannertimer"></div>
+                </div>
+            </div>
+
+            <!-- /REVOLUTION SLIDER -->
+            <section class="container text-center">
+                <h1 class="text-center">
+                    <strong>Bienvenido</strong> a {{ app.name }}
+                    <span class="subtitle">{{ app.slogan }}</span>
+                </h1>
+
+                <p class="lead">
+                    {{ app.publicity }}
+                </p>
+
+            </section>
+
+
+            <div class="container">
+                <hr class="half-margins"/>
+                <!-- hr line -->
+            </div>
+
+
+            <!-- FEATURED BOXES 3 -->
+            <section class="container">
+                <div class="row">
+
+                    {% set col = 12 / app.business | length %}
+                    {% if numOffer %}
+                        {% set rows = app.business | length + 1 %}
+                        {% set col =  12 / rows %}
+                    {% endif %}
+
+                    {% if col == 12 %}
+                        {% set col = 4 %}
+                        <div class="col-sm-{{ col }}"></div>
+                    {% elseif col == 6 %}
+                        {% set col = 4 %}
+                        <div class="col-sm-2"></div>
+                    {% endif %}
+
+                    {% for business in app.business %}
+
+                        <div class="col-sm-{{ col }}">
+                            <div class="item-box nomargin-top">
+                                <figure>
+                                    <a class="item-hover"
+                                       href="{{ url('_business', {'find':business.slug}) }}">
+                                        <span class="overlay color2"></span>
+                                        <span class="inner">
+                                            <span class="block fa fa-eye fsize20"></span>
+                                            VER <strong>DETALLES</strong>
+                                        </span>
+                                    </a>
+
+                                    <img alt="" class="img-responsive autoHeight"
+                                         src="{{ asset(business.imgThumb.path) }}"
+                                         width="100%"/>
+
+                                </figure>
+                                <div class="item-box-desc">
+                                    <h4 class="wrap">
+                                        <a class="styleColor"
+                                           href="{{ url('_business', {'business':business.slug}) }}">
+                                            {{ business.name }}
+                                        </a>
+                                    </h4>
+
+                                    <p>{{ business.slogan | truncate(55, true) }}</p>
+                                </div>
+                            </div>
+                        </div>
+
+                    {% endfor %}
+
+                    {% if numOffer is defined and numOffer %}
+
+                        <div class="col-sm-{{ col }}">
+                            <div class="item-box nomargin-top">
+                                <figure>
+                                    <a class="item-hover"
+                                       href="{{ url('_offers', {'find':'all', 'field':'discount', 'order':'desc'}) }}">
+                                        <span class="overlay color2"></span>
+                                        <span class="inner">
+                                            <span class="block fa fa-eye fsize20"></span>
+                                            VER <strong>OFERTAS</strong>
+                                        </span>
+                                    </a>
+
+                                    <img alt="" class="img-responsive autoHeight"
+                                         src="{{ asset(app.imgOffer.path) }}"/>
+
+                                </figure>
+                                <div class="item-box-desc">
+                                    <h4 class="wrap">
+                                        <a class="styleColor"
+                                           href="{{ url('_offers', {'find':'all', 'field':'discount', 'order':'desc'}) }}">
+                                            Ofertas
+                                        </a>
+                                    </h4>
+
+                                    <p>{{ app.sloganOffer }}</p>
+                                </div>
+                            </div>
+                        </div>
+
+                    {% endif %}
+
+                    {% if col == 12 %}
+                        <div class="col-sm-{{ col }}"></div>
+                    {% elseif col == 6 %}
+                        <div class="col-sm-2"></div>
+                    {% endif %}
+
+                </div>
+            </section>
+            <!-- /FEATURED BOXES 3 -->
+
+            <div class="container">
+                <hr class="half-margins"/>
+                <!-- hr line -->
+            </div>
+
+            {#<div class="container">#}
+                {#<hr class="no-lines"/>#}
+                {#<!-- hr line -->#}
+            {#</div>#}
+
+
+            <!-- CAROUSEL -->
+            <section class="container">
+                <div class="row">
+
+                    <div class="col-md-6">
+                        <h2>{{ app.infoTitle }}</h2>
+
+                        <p>
+                            {{ app.infoText }}
+                        </p>
+
+                        {% if app.showCarousel %}
+                            <!-- divider -->
+                            <div class="divider styleColor">
+                                <i class="fa fa-star"></i>
+                            </div>
+
+                            <!-- carousel -->
+                            <div class="owl-carousel"
+                                 data-plugin-options='{"items": 8, "singleItem": false, "pagination": false, "autoPlay": true}'>
+                                {% for carousel in app.carouselImages %}
+                                    <div>
+                                        <img class="img-responsive" src="{{ asset(carousel.path) }}"
+                                             alt="">
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="owl-carousel controlls-over"
+                             data-plugin-options='{"items": 1, "singleItem": true, "navigation": true, "pagination": false, "transitionStyle":"fadeUp", "autoPlay": true}'>
+                            {% for img in app.infoImages %}
+                                <div>
+                                    <img class="img-responsive"
+                                         src="{{ asset(img.path) }}"
+                                         width="100%"
+                                         alt="">
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+
+
+                </div>
+            </section>
+            <!-- /CAROUSEL -->
+
+
+            <!-- CALLOUT -->
+            <div class="bs-callout margin-top text-center styleBackground noradius">
+                <h3>Bienvenido a <strong>{{ app.name }},</strong> todas nuestras <strong>ofertas</strong> a tu alcance.
+                    <a href="{{ url('_offers', {'find':'all'}) }}" target="_blank" class="btn btn-primary btn-lg">Entérate
+                        ya!</a></h3>
+            </div>
+            <!-- /CALLOUT -->
+
+
+            <!-- PARALLAX -->
+            <section class="parallax delayed margin-footer" data-stellar-background-ratio="0.8"
+                     style="background-color: #40a6f8; background-image: url('{{ asset(app.imgParallax.path) }}');">
+                <span class="overlay"></span>
+
+                <div class="container">
+
+                    <div class="row">
+                        <!-- left content -->
+                        <div class="col-md-7 animation_fade_in">
+                            <h2><strong>{{ app.name }} </strong></h2>
+                            {% for business in app.business %}
+                                <p>
+                                    <strong><a href="{{ url('_business',{'business':business.slug}) }}">{{ business.name }}</a></strong>, {{ business.description | truncate(150, true) }}
+                                </p>
+                            {% endfor %}
+                            <p class="lead">
+                                Posee un equipo de trabajo altamente calificado y profesional.
+                            </p>
+
+                            <a class="btn btn-primary btn-lg" href="{{ url('_support_about-us') }}">Cuéntame más !!!</a>
+                        </div>
+
+                        <!-- right image -->
+                        <!--
+      <div class="col-md-5 animation_fade_in">
+        <img class="visible-md visible-lg img-responsive pull-right" src="{{ asset('bundles/app/assets/images/bg_animate2.png') }}" alt="" />
+      </div>
+      -->
+                    </div>
+                </div>
+            </section>
+            <!-- PARALLAX -->
+
+        </div>
+        <!-- /WRAPPER -->
+    {% endfor %}
+{% endblock body %}
+
+{% block footer %}
+    {% include 'AppBundle:design:footer_bar.html.twig' %}
+{% endblock footer %}

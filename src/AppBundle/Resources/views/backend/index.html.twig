@@ -1,0 +1,147 @@
+{% extends 'AppBundle::base_back.html.twig' %}
+
+{% block javascripts %}
+
+    {{ parent() }}
+    <script src="{{ asset('bundles/app/backend/vendor/chartjs/Chart.min.js') }}"></script>
+
+    <script>
+
+        $(function () {
+
+            /**
+             * Options SingleBar
+             */
+            var singleBarOptions = {
+                scaleBeginAtZero : true,
+                scaleShowGridLines : true,
+                scaleGridLineColor : "rgba(0,0,0,.05)",
+                scaleGridLineWidth : 1,
+                barShowStroke : true,
+                barStrokeWidth : 1,
+                barValueSpacing : 5,
+                barDatasetSpacing : 1,
+                responsive:true
+            };
+            var item = $('#item').data('num');
+
+            for (i = 0; i < item; i++) {
+
+                /**
+                 * Data for Bar chart
+                 */
+                var singleBarData = {
+                    labels: $('#state' + i).data('array'),
+                    datasets: [
+                        {
+                            label: "Estadísticas",
+                            fillColor: "rgba(98,203,49,0.5)",
+                            strokeColor: "rgba(98,203,49,0.8)",
+                            highlightFill: "rgba(98,203,49,0.75)",
+                            highlightStroke: "rgba(98,203,49,1)",
+                            data: $('#state' + i).data('set')
+                        }
+                    ]
+                };
+
+                var id = 'state' + i;
+                var ctx = document.getElementById(id).getContext("2d");
+                var myNewChart = new Chart(ctx).Bar(singleBarData, singleBarOptions);
+            }
+
+
+            /**
+             * Data Users
+             */
+            var usersData = {
+                labels: $('#users').data('array'),
+                datasets: [
+                    {
+                        label: "Estadísticas",
+                        fillColor: "rgba(98,203,49,0.5)",
+                        strokeColor: "rgba(98,203,49,0.8)",
+                        highlightFill: "rgba(98,203,49,0.75)",
+                        highlightStroke: "rgba(98,203,49,1)",
+                        data: $('#users').data('set')
+                    }
+                ]
+            };
+
+            var users = document.getElementById('users').getContext("2d");
+            var myNewChart = new Chart(users).Bar(usersData, singleBarOptions);
+
+            /**
+             * Data Offers
+             */
+            var offerData = {
+                labels: $('#offers').data('array'),
+                datasets: [
+                    {
+                        label: "Estadísticas",
+                        fillColor: "rgba(98,203,49,0.5)",
+                        strokeColor: "rgba(98,203,49,0.8)",
+                        highlightFill: "rgba(98,203,49,0.75)",
+                        highlightStroke: "rgba(98,203,49,1)",
+                        data: $('#offers').data('set')
+                    }
+                ]
+            };
+
+            var offers = document.getElementById('offers').getContext("2d");
+            var myNewChart = new Chart(offers).Bar(offerData, singleBarOptions);
+
+            /**
+             * Options Double Bar
+             */
+            var barOptions = {
+                scaleBeginAtZero : true,
+                scaleShowGridLines : true,
+                scaleGridLineColor : "rgba(0,0,0,.05)",
+                scaleGridLineWidth : 1,
+                barShowStroke : true,
+                barStrokeWidth : 1,
+                barValueSpacing : 5,
+                barDatasetSpacing : 1,
+                responsive:true
+            };
+
+            /**
+             * Data Notices
+             */
+            var noticeData = {
+                labels: $('#notices').data('array'),
+                datasets: [
+                    {
+                        label: "Notificaciones",
+                        fillColor: "rgba(98,203,49,0.5)",
+                        strokeColor: "rgba(98,203,49,0.8)",
+                        highlightFill: "rgba(98,203,49,0.75)",
+                        highlightStroke: "rgba(98,203,49,1)",
+                        data:  $('#notices').data('set1')
+                    },
+                    {
+                        label: "Notificaciones",
+                        fillColor: "rgba(220,220,220,0.5)",
+                        strokeColor: "rgba(220,220,220,0.8)",
+                        highlightFill: "rgba(220,220,220,0.75)",
+                        highlightStroke: "rgba(220,220,220,1)",
+                        data:  $('#notices').data('set2')
+                    }
+                ]
+            };
+
+            var notices = document.getElementById('notices').getContext("2d");
+            var myNewChart = new Chart(notices).Bar(noticeData, barOptions);
+
+        });
+
+    </script>
+{% endblock javascripts %}
+
+{% block header %}
+    {% include 'AppBundle:backend/design:header_bar.html.twig' %}
+{% endblock header %}
+
+{% block body %}
+    {% include 'AppBundle:backend/design:body.html.twig' %}
+{% endblock body %}

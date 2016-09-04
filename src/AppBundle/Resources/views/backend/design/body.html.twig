@@ -1,0 +1,145 @@
+<!-- Main Wrapper -->
+<div id="wrapper">
+
+    <div class="content animate-panel">
+        <div class="row">
+            <div class="col-lg-12 text-center m-t-md">
+                <h2>
+                    Bienvenido al Panel Control de {{ appConfig.name }}
+                </h2>
+
+                <p>
+                    Este panel de control te ofrece <strong>toda la flexibilidad y la robustez administrativa
+                        necesaria</strong> para mantener la aplicación de publicidad <strong>actualizada y
+                        cambiante!</strong>
+                </p>
+            </div>
+        </div>
+
+        <hr class="left-separator">
+
+        {# Business stadistics #}
+        <div id="item" data-num="{{ appConfig.business | length }}" class="row">
+            <div class="col-lg-12">
+                {% for business in appConfig.business %}
+                    <div class="col-lg-4">
+                        <div class="hpanel">
+                            <div class="panel-heading">
+                                {{ business.name }}
+                            </div>
+                            <div class="panel-body">
+                                <div>
+                                    {% set numProduct = 0 %}
+                                    {% set numOffer = 0 %}
+                                    {% for category in business.categories %}
+                                        {% set numProduct = numProduct + category.products | length %}
+                                        {% for product in category.products %}
+                                            {% if product.isOffer %}
+                                                {% set numOffer = numOffer + 1 %}
+                                            {% endif %}
+                                        {% endfor %}
+                                    {% endfor %}
+                                    <canvas id="state{{ loop.index0 }}" height="140"
+                                            data-array='["Categorías", "Productos", "Ofertas"]'
+                                            data-set="[{{ business.categories | length }}, {{ numProduct }}, {{ numOffer }}]"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+        {# /Business stadistics #}
+
+
+        <div class="row">
+            <div class="col-lg-12">
+
+                {# User stadistics #}
+                <div class="col-lg-4">
+                    <div class="hpanel">
+                        <div class="panel-heading">
+                            Usuarios del Sistema
+                            <div class="panel-body">
+                                <div>
+                                    {% set userActive=0 %}
+                                    {% for user in users %}
+                                        {% if user.isActive %}
+                                            {% set userActive = userActive+1 %}
+                                        {% endif %}
+                                    {% endfor %}
+                                    <canvas id="users" height="140"
+                                            data-array='["Usuarios", "Activos", "Inactivos"]'
+                                            data-set="[{{ users | length }}, {{ userActive }}, {{ users | length - userActive }}]"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {# /User stadistics #}
+
+                {# Nitices stadistic #}
+                <div class="col-lg-4">
+                    <div class="hpanel">
+                        <div class="panel-heading">
+                            Notificaciones
+                            <div class="panel-body">
+                                <div>
+                                    {% set comment = 0 %}
+                                    {% set unReadComment = 0 %}
+                                    {% set email = 0 %}
+                                    {% set unReadEmail = 0 %}
+                                    {% set offer = 0 %}
+                                    {% set unReadOffer = 0 %}
+                                    {% for notice in notices %}
+                                        {% if notice.type.type=='comment' %}
+                                            {% set comment = comment + 1 %}
+                                            {% if notice.isRead %}
+                                                {% set unReadComment=unReadComment+1 %}
+                                            {% endif %}
+                                        {% elseif notice.type.type=='email' %}
+                                            {% set email = email +1 %}
+                                            {% if notice.isRead %}
+                                                {% set unReadEmail=unReadEmail+1 %}
+                                            {% endif %}
+                                        {% elseif notice.type.type=='offer' %}
+                                            {% set offer = offer +1 %}
+                                            {% if notice.isRead %}
+                                                {% set unReadOffer=unReadOffer+1 %}
+                                            {% endif %}
+                                        {% endif %}
+                                    {% endfor %}
+                                    <canvas id="notices" height="140"
+                                            data-array='["Mensajes", "Comentarios", "Ofertas"]'
+                                            data-set1="[{{ comment }}, {{ email }}, {{ offer }}]"
+                                            data-set2="[{{ unReadComment }}, {{ unReadEmail }}, {{ unReadOffer }}]"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {# /Nitices stadistic #}
+
+                {# Offer stadistics #}
+                <div class="col-lg-4">
+                    <div class="hpanel">
+                        <div class="panel-heading">
+                            Terminación de Ofertas
+                            <div class="panel-body">
+                                <div>
+                                    <canvas id="offers" height="140"
+                                            data-array='["Hoy", "En 1 día", "En 2 días", "En 3 días"]'
+                                            data-set="[5, 8, 2, 4]"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {# /Offer stadistics #}
+
+            </div>
+
+            <!-- Footer-->
+            {% include 'AppBundle:backend/design:footer_bar.html.twig' %}
+
+        </div>

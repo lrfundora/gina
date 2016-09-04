@@ -1,0 +1,119 @@
+{% extends 'AppBundle::base_front.html.twig' %}
+
+{% block header %}
+    {% include 'AppBundle:design:header_bar.html.twig' %}
+{% endblock header %}
+
+{% block body %}
+    <!-- WRAPPER -->
+    <div id="wrapper">
+
+        <!-- PAGE TITLE -->
+        <header id="page-title">
+
+            <div class="container">
+                <h1>Nosotros</h1>
+                <ul class="breadcrumb">
+                    {{ wo_render_breadcrumbs() }}
+                </ul>
+            </div>
+        </header>
+
+        <section class="container">
+
+            <!-- WELCOME -->
+            <article>
+                <h2>Bienvenidos a {{ data[0].name }} </h2>
+
+                <p>
+                    <strong>{{ data[0].name }}</strong> es una empresa compuesta por:
+                <ul>
+                    {% for business in data[0].business %}
+                        <li>
+                            <a href="{{ url('_business',{'find':business.slug}) }}">{{ business.name }}</a>, {{ business.description }}
+                        </li>
+                    {% endfor %}
+                </ul>
+
+                </p>
+
+                <div class="divider"><!-- divider -->
+                    <i class="fa fa-star"></i>
+                </div>
+
+                <p class="lead">Surgimiento
+                </p>
+
+                <p>
+                    Debido a un gran impulso en el sector privado de la sociedad, se comenzó la apertura de muchos y
+                    diversos
+                    negocios, unos contaban con los recursos los necesarios para abrir un negocio con calidad y otros
+                    solo
+                    incursionaban en el tema. Esto trajo como consecuencia una competitividad elevada haciendo que la
+                    calidad
+                    del
+                    producto y del servicio fueran los pilares fundamentales para el éxito.
+                </p>
+
+                <p>
+                    Luego que algunos negocios ya eran propietarios de una excelente reputación y selecta clientela, es
+                    en este
+                    momento que surge <strong>GINA</strong>.
+                </p>
+
+                <p>
+                    GINA es una iniciativa de integración y asociación de los propietarios de los diferentes
+                    establecimientos de
+                    los cuales se compone. Las ideas principales con esta asociación son:
+                </p>
+                <ul>
+                    <li>
+                        Lanzar varios productos y servicios bajo el mismo nombre, <strong>GINA</strong>.
+                    </li>
+                    <li>
+                        Renovar la imagen de los negocios.
+                    </li>
+                    <li>
+                        Estandarizar y elevar la calidad del servicio y los productos.
+                    </li>
+                    <li>
+                        Hacer que la experiencia de los clientes sea algo único y especial.
+                    </li>
+                    <li>
+                        Realizar campañas de publicidad para atraer nuevos clientes aprovechar las tecnologías de
+                        comunicación.
+                    </li>
+                    <li>
+                        Convertir a GINA en una empresa con baja competencia.
+                    </li>
+                </ul>
+
+                <div class="divider"><!-- divider -->
+                    <i class="fa fa-star"></i>
+                </div>
+
+                <p class="lead">Actualidad
+                </p>
+
+                <p>
+                    Actualmente, <strong>GINA</strong> ha cumplido con todos sus objetivos y más… El número de clientes
+                    ha aumentado
+                    considerablemente, la calidad de sus servicios y de los productos, la elegancia y profesionalidad
+                    del
+                    personal de trabajo y la belleza del diseño, pulcritud y modernización de los establecimientos son
+                    las
+                    características que distinguen a esta empresa que se está convirtiendo en un ícono de los servicios.
+                </p>
+
+            </article>
+
+        </section>
+
+    </div>
+    <!-- /WRAPPER -->
+
+{% endblock body %}
+
+{% block footer %}
+    {% include 'AppBundle:design:footer_bar.html.twig' %}
+{% endblock footer %}

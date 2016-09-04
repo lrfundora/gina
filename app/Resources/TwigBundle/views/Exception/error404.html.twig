@@ -1,0 +1,34 @@
+{% extends 'AppBundle::base_front.html.twig' %}
+
+{% block icon %}
+    <link rel="icon" type="image/png" href="{{ asset('bundles/app/assets/images/icon_error.png') }}"/>
+{% endblock %}
+
+{% block title %}
+    Error 404
+{% endblock %}
+
+{% block body %}
+
+    <!-- WRAPPER -->
+    <div id="wrapper">
+
+        <section class="container">
+            <div class="row">
+                <div class="col-lg-4"></div>
+                <div class="col-lg-8">
+                    <h2>
+                        <strong>Oops</strong>, algo anda mal!!!
+                        <br>
+                        <span class="fsize20">Lo sentimos, <strong>la url solicitada no existe.</strong></span>
+                    </h2>
+
+                    <div class="e404">404</div>
+                </div>
+            </div>
+        </section>
+
+    </div>
+    <!-- /WRAPPER -->
+
+{% endblock body %}

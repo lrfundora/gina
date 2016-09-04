@@ -1,0 +1,87 @@
+{% for app in data %}
+<!-- FOOTER -->
+<footer>
+
+    <!-- copyright , scrollTo Top -->
+    <div class="footer-bar">
+        <div class="container">
+            <span class="copyright">&copy; {{ 'now'|date('Y') <= 2015 ?'2015' :'2015 - '~'now'|date('Y') }} {{ app.name }}
+                . Todos los derechos reservados.</span>
+            <a class="toTop" href="#topNav">Subir <i class="fa fa-arrow-circle-up"></i></a>
+        </div>
+    </div>
+    <!-- copyright , scrollTo Top -->
+
+
+    <!-- footer content -->
+    <div class="footer-content">
+        <div class="container">
+
+            <div class="row">
+
+
+                <!-- FOOTER CONTACT INFO -->
+                <div class="column col-md-4">
+                    <h3>CONTACTO</h3>
+
+                    <p class="contact-desc">
+                        Existimos, solo porque pensamos en tí todo el tiempo, en tu satisfación y la calidad de nuestros
+                        servicio.
+                    </p>
+                    <address class="font-opensans">
+                        <ul>
+
+                            <li class="footer-sprite address">
+                                {{ app.address }}
+                            </li>
+                            <li class="footer-sprite phone">
+                                {{ app.phone }}
+                            </li>
+                            <li class="footer-sprite email">
+                                <a href="mailto:{{ app.email }}">{{ app.email }}</a>
+                            </li>
+                        </ul>
+                    </address>
+
+                </div>
+                <!-- /FOOTER CONTACT INFO -->
+
+
+                <!-- FOOTER LOGO -->
+                <div class="column logo col-md-4 text-center">
+                    <div class="logo-content">
+                        <img class="animate_fade_in" src="{{ asset(app.logoDown.path) }}" width="200"
+                             alt="{{ app.name }}"/>
+
+                        <h3 class="fsize40">{{ app.name | upper }}</h3>
+                    </div>
+                </div>
+                <!-- /FOOTER LOGO -->
+                {% endfor %}
+
+                <!-- FOOTER LATEST POSTS -->
+                <div class="column col-md-4 text-right">
+                    <h3>PRODUCTOS MÁS COMENTADOS</h3>
+                    {% for item in topComments %}
+                        {% if item[0].comments | length > 0 %}
+                            <div class="post-item">
+                                <small>{{ item[0].category.business.name ~' / '~ item[0].name }}</small>
+                                <h3>
+                                    <a href="{{ path('_business_products_comment', {'business':item[0].category.business.slug,'id':item[0].id}) }}">
+                                        {{ item[0].comments | length }} Comentarios
+                                    </a>
+                                </h3>
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+                <!-- /FOOTER LATEST POSTS -->
+
+            </div>
+
+        </div>
+    </div>
+    <!-- footer content -->
+
+</footer>
+<!-- /FOOTER -->

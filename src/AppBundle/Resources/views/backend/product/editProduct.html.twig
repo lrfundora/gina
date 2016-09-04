@@ -1,0 +1,400 @@
+{% extends 'AppBundle::base_back.html.twig' %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet"
+          href="{{ asset('bundles/app/backend/vendor/bootstrap-datepicker-master/dist/css/bootstrap-datepicker3.min.css') }}"/>
+{% endblock stylesheets %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('bundles/app/backend/vendor/moment/min/moment.min.js') }}"></script>
+    <script src="{{ asset('bundles/app/backend/vendor/bootstrap-datepicker-master/dist/js/bootstrap-datepicker.min.js') }}"></script>
+    <script src="{{ asset('bundles/app/backend/vendor/bootstrap-file-input/bootstrap.file-input.js') }}"></script>
+    <script src="{{ asset('bundles/app/backend/vendor/jquery-validation/jquery.validate.min.js') }}"></script>
+    <script>
+
+        $(function () {
+
+            $('.input-group.date').datepicker({
+                format: 'dd/mm/yyyy'
+            });
+
+            $('input[type="file"]').bootstrapFileInput();
+            $('.input-group-addon').on('click', function (e) {
+                e.preventDefault();
+            });
+
+            $("#formProduct").validate({
+                rules: {
+                    'formProduct[name]': {
+                        required: true,
+                        minlength: 3,
+                        maxlength: 50
+                    },
+                    'formProduct[price]': {
+                        required: true,
+                        number: true,
+                        maxlength: 10
+                    },
+                    'formProduct[description]': {
+                        required: true,
+                        minlength: 20,
+                        maxlength: 1000
+                    },
+                    'formProduct[discount]': {
+                        required: true,
+                        number: true,
+                        range: [1, 99]
+                    },
+                    'formProduct[publicated]': {
+                        required: true
+                    },
+                    'formProduct[expired]': {
+                        required: true
+                    }
+                },
+                messages: {
+                    'formProduct[name]': {
+                        required: "Este campo no puede quedar vacío.",
+                        minlength: jQuery.validator.format("El campo debe tener al menos {0} caracteres."),
+                        maxlength: jQuery.validator.format("El campo puede tener como máximo {0} caracteres.")
+                    },
+                    'formProduct[price]': {
+                        required: "Este campo no puede quedar vacío.",
+                        number: "Este campo solo permite números.",
+                        maxlength: jQuery.validator.format("El campo puede tener como máximo {0} caracteres.")
+                    },
+                    'formProduct[description]': {
+                        required: "Este campo no puede quedar vacío.",
+                        minlength: jQuery.validator.format("El campo debe tener al menos {0} caracteres."),
+                        maxlength: jQuery.validator.format("El campo puede tener como máximo {0} caracteres.")
+                    },
+                    'formProduct[discount]': {
+                        required: "Agregue un descuento.",
+                        number: "Este campo solo admite números.",
+                        range: jQuery.validator.format("Debe introducir un número entre {0} y {1}.")
+                    },
+                    'formProduct[publicated]': {
+                        required: "Seleccione una fecha."
+                    },
+                    'formProduct[expired]': {
+                        required: "Seleccione una fecha."
+                    }
+                },
+                submitHandler: function (form) {
+                    form.submit();
+                },
+                errorPlacement: function (error, element) {
+                    $(element)
+                            .closest("form")
+                            .find("label[for='" + element.attr("id") + "']")
+                            .append(error);
+                },
+                errorElement: "span"
+            });
+
+            $("#uploadPhoto").on('click', function (e) {
+                $('#formPhoto').submit();
+            });
+
+            // Valid Offer
+            $("#formProduct_isOffer").on('change', function (e) {
+                if (this.checked) {
+                    $('#collapseOffer').addClass('in');
+                    if ($('#formProduct_discount').val() == '0') {
+                        $('#formProduct_discount').val(null);
+                    }
+                }
+                else {
+                    $('#collapseOffer').removeClass('in');
+                }
+            });
+
+            isCheckOffer();
+        });
+
+        function isCheckOffer() {
+            if ($('input:checkbox:checked').val()) {
+                $('#collapseOffer').addClass('in');
+                return;
+            }
+            $('#collapseOffer').removeClass('in');
+
+            if ($('#formProduct_discount').val() == '0') {
+                $('#formProduct_discount').val(null);
+            }
+        }
+
+    </script>
+{% endblock javascripts %}
+
+{% block header %}
+    {% include 'AppBundle:backend/design:header_bar.html.twig' %}
+{% endblock header %}
+
+{% block body %}
+    <div id="wrapper">
+
+    <!-- Breadcrumb -->
+    <div class="normalheader transition animated fadeIn small-header">
+        <div class="hpanel">
+            <div class="panel-body">
+                <a class="small-header-action" href="#">
+                    <div class="clip-header">
+                        <i class="fa fa-arrow-down"></i>
+                    </div>
+                </a>
+
+                <div id="hbreadcrumb" class="pull-right">
+                    <ol class="hbreadcrumb breadcrumb">
+                        <li><a href="{{ path('_admin_index') }}">Inicio</a></li>
+                        <li>
+                            <a href="{{ path('_admin_product') }}">Producto</a>
+                        </li>
+                        <li class="active">
+                            <span>Editar</span>
+                        </li>
+                    </ol>
+                </div>
+                <h2 class="font-light m-b-xs">
+                    panel de control
+                </h2>
+                <small>Herramienta administrativa que permite mantener actualizada la información</small>
+            </div>
+        </div>
+    </div>
+    <!-- /Breadcrumb -->
+
+    <!-- Table -->
+    <div class="content animate-panel">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="hpanel">
+                    <div class="panel-heading font-uppercase">
+                        edición de producto
+                    </div>
+                    <div class="panel-body">
+                        <div class="hpanel">
+                            <div class="panel-body">
+                                <div class="">
+                                    <h3 class="text-uppercase">
+                                        <a href="{{ url('_admin_product') }}" class="btn btn-default"
+                                           style="margin-top: -5px;">
+                                            <i class="fa fa-arrow-left"></i>
+                                        </a>
+                                        editar producto
+                                    </h3>
+                                </div>
+
+                                <hr class="left-separator">
+
+                                <div class="row">
+                                    <div class="col-lg-12 animated-panel zoomIn" style="animation-delay: 0.4s;">
+                                        <div class="hpanel">
+                                            <ul class="nav nav-tabs">
+                                                <li {{ tab=='1' ?'class="active"' :'' }}>
+                                                    <a href="#tab-1" data-toggle="tab" aria-expanded="false">
+                                                        <i class="pe-7s-shopbag"></i>
+                                                        Información del producto
+                                                    </a>
+                                                </li>
+                                                <li {{ tab=='2' ?'class="active"' :'' }}>
+                                                    <a href="#tab-2" data-toggle="tab" aria-expanded="false">
+                                                        <i class="fa fa-picture-o"></i>
+                                                        Imágenes del producto
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                            <div class="tab-content">
+                                                <div id="tab-1" {{ tab=='1' ?'class="tab-pane active"' :'class="tab-pane"' }}>
+                                                    <div class="panel-body">
+                                                        <div class="row">
+                                                            <div class="col-sm-12">
+                                                                {% for Message in app.session.flashbag.get('productInfo') %}
+                                                                    <div class="alert alert-success">
+                                                                        <i class="fa fa-smile-o"></i>
+                                                                        {{ Message | raw }}
+                                                                    </div>
+                                                                    <br/>
+                                                                {% endfor %}
+                                                                <div class="row">
+                                                                    <div class="col-lg-3"></div>
+                                                                    {{ form_start(form, {'attr':{'id':'formProduct'}}) }}
+                                                                    <div class="col-lg-6"
+                                                                         style="background-color: #f1f3f6; border: 1px solid #ddd; margin: 15px 0; padding: 10px;">
+                                                                        <div class="col-lg-8">
+                                                                            <div class="form-group">
+                                                                                {{ form_label(form.name) }}
+                                                                                {{ form_widget(form.name) }}
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="col-lg-4">
+                                                                            <div class="form-group">
+                                                                                {{ form_label(form.price) }}
+                                                                                <div class="input-group m-b">
+                                                                                    <span class="input-group-addon">$</span>
+                                                                                    {{ form_widget(form.price) }}
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="col-lg-12">
+                                                                            <div class="form-group">
+                                                                                {{ form_label(form.description) }}
+                                                                                {{ form_widget(form.description) }}
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="col-lg-12">
+                                                                            <div id="offer" class="form-group">
+                                                                                {{ form_widget(form.isOffer) }}
+                                                                                {{ form_label(form.isOffer) }}
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="collapse" id="collapseOffer">
+                                                                            <div class="col-lg-4">
+                                                                                <div class="form-group">
+                                                                                    {{ form_label(form.discount) }}
+                                                                                    <div class="input-group m-b">
+                                                                                        {{ form_widget(form.discount) }}
+                                                                                        <span class="input-group-addon">%</span>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="col-lg-4">
+                                                                                <div class="form-group">
+                                                                                    {{ form_label(form.publicated) }}
+                                                                                    <div class="input-group date">
+                                                                                        {{ form_widget(form.publicated) }}
+                                                                                        <span class="input-group-addon">
+                                                                                            <i class="fa fa-calendar"></i>
+                                                                                        </span>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="col-lg-4">
+                                                                                <div class="form-group">
+                                                                                    {{ form_label(form.expired) }}
+                                                                                    <div class="input-group date">
+                                                                                        {{ form_widget(form.expired) }}
+                                                                                        <span class="input-group-addon">
+                                                                                            <i class="fa fa-calendar"></i>
+                                                                                        </span>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="col-lg-12">
+                                                                                <div class="form-group">
+                                                                                    {{ form_label(form.conditions) }}
+                                                                                    {{ form_widget(form.conditions) }}
+                                                                                    <small class="text-primary"><strong>Nota:</strong>
+                                                                                        Si no agrega alguna condición se
+                                                                                        asumirá que la oferta no tiene
+                                                                                        condiciones.
+                                                                                    </small>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="col-lg-12">
+                                                                            <div class="form-group">
+                                                                                {{ form_widget(form.update) }}
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    {{ form_end(form) }}
+                                                                    <div class="col-lg-3"></div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div id="tab-2" {{ tab=='2' ?'class="tab-pane active"' :'class="tab-pane"' }}>
+                                                    <div class="panel-body">
+                                                        <div class="row">
+                                                            <div class="col-sm-2"></div>
+                                                            <div class="col-sm-8">
+                                                                {% for Message in app.session.flashbag.get('productImagesSuccess') %}
+                                                                    <div class="alert alert-success">
+                                                                        <i class="fa fa-smile-o"></i>
+                                                                        {{ Message | raw }}
+                                                                    </div>
+                                                                    <br/>
+                                                                {% endfor %}
+                                                                {% for Message in app.session.flashbag.get('productImagesError') %}
+                                                                    <div class="alert alert-danger">
+                                                                        <i class="fa fa-frown-o"></i>
+                                                                        {{ Message | raw }}
+                                                                    </div>
+                                                                    <br/>
+                                                                {% endfor %}
+                                                                <p class="alert alert-info">
+                                                                    <i class="fa fa-exclamation-circle"></i>
+                                                                    Ajustarse a las dimensiones de la imagen garantiza
+                                                                    la optima experiencia del diseño.
+                                                                </p>
+
+                                                                <div class="row"
+                                                                     style="background-color: #f1f3f6; border: 1px solid #ddd; margin: 15px 0; padding: 10px 0 10px 0;">
+                                                                    <div class="col-sm-12">
+
+                                                                        <!-- Form Product Images -->
+                                                                        <div class="row">
+                                                                            {% for img in entity.photos %}
+                                                                                <div class="col-sm-3">
+                                                                                    <img src="{{ asset(img.path) }}"
+                                                                                         class="img-thumbnail m-b center-block"
+                                                                                         width="100%"
+                                                                                         alt="">
+
+                                                                                    {% if entity.photos | length > 1 %}
+                                                                                        <a class="btn btn-danger btn-xs center-block"
+                                                                                           style="margin-top: -20px;"
+                                                                                           href="{{ path('_admin_product_photo_delete', {'id':entity.id, 'idF':img.id}) }}">
+                                                                                            Eliminar
+                                                                                        </a>
+                                                                                    {% endif %}
+                                                                                </div>
+                                                                            {% endfor %}
+                                                                        </div>
+
+                                                                        <br>
+
+                                                                        {{ form_start(formPhoto, {'attr':{'id':'formPhoto','action':path('_admin_product_photo_upload',{'id':entity.id}) }}) }}
+                                                                        <div class="input-group bootstrap-touchspin">
+                                                                            {{ form_label(formPhoto.file) }}
+                                                                            {{ form_widget(formPhoto.file, {'attr':{'title':'Seleccione una imagen para el producto (350x250)' }}
+                                                                            ) }}
+                                                                            <span id="uploadPhoto"
+                                                                                  class="input-group-addon bootstrap-touchspin-postfix btn btn-default">
+                                                                            <i class="fa fa-upload"></i>
+                                                                            Agregar imagen
+                                                                        </span>
+                                                                        </div>
+                                                                        {{ form_end(formPhoto) }}
+                                                                        <!-- /Form Product Images -->
+
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-sm-2"></div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /Table -->
+
+        <!-- Footer -->
+        {% include 'AppBundle:backend/design:footer_bar.html.twig' %}
+        <!-- /Footer -->
+
+    </div>
+
+{% endblock body %}

@@ -1,0 +1,12 @@
+<!-- Footer-->
+<footer class="footer">
+    <span class="pull-right">
+        v1.0
+    </span>
+
+    {% if 'now'|date('Y') <= 2015 %}
+        &copy; 2015 {{ appConfig.name }}. Todos los derechos reservados.
+    {% else %}
+        &copy; 2015 - {{ 'now'|date('Y') }} {{ appConfig.name }}. Todos los derechos reservados.
+    {% endif %}
+</footer>

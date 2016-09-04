@@ -1,0 +1,205 @@
+{% extends 'AppBundle::base_front.html.twig' %}
+
+{% block header %}
+    {% include 'AppBundle:design:header_bar.html.twig' %}
+{% endblock header %}
+
+{% block body %}
+
+    <script type="text/javascript" src="{{ asset('bundles/app/js/validate_create_account.js') }}"></script>
+
+    <!-- WRAPPER -->
+    <div id="wrapper">
+
+    <!-- PAGE TITLE -->
+    <header id="page-title">
+        <div class="container">
+            <h1>Crear cuenta</h1>
+            <ul class="breadcrumb">
+                {{ wo_render_breadcrumbs() }}
+            </ul>
+        </div>
+    </header>
+
+
+    <section class="container">
+
+        <div class="row">
+
+            <!-- REGISTER -->
+            <div class="col-sm-6">
+
+                <h2><strong>Crear</strong> cuenta</h2>
+
+                {{ form_start(form) }}
+
+                <!-- alert failed -->
+                {% if error is defined %}
+                    <div class="alert alert-danger">
+                        <i class="fa fa-frown-o"></i>
+                        {{ error | raw }}
+                    </div>
+                {% endif %}
+
+                <!-- alert required -->
+                <div class="alert alert-warning">
+                    <i class="fa fa-warning"></i>
+                    <strong>Todos</strong> los campos son obligatorios.
+
+                </div>
+
+                <div class="row">
+                    <div class="form-group">
+                        <div class="col-md-12">
+                            {{ form_label(form.name) }}
+                            {{ form_widget(form.name) }}
+                            {{ form_errors(form.name) }}
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group">
+                        <div class="col-md-12">
+                            {{ form_label(form.lastname) }}
+                            {{ form_widget(form.lastname) }}
+                            {{ form_errors(form.lastname) }}
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-12">
+                        <label><strong>Fecha de nacimiento</strong></label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group">
+                        <div class="col-sm-3">
+                            {{ form_label(form.day) }}
+                            {{ form_widget(form.day) }}
+                        </div>
+                        <div class="col-sm-5">
+                            {{ form_label(form.month) }}
+                            {{ form_widget(form.month) }}
+                        </div>
+                        <div class="col-sm-4">
+                            {{ form_label(form.year) }}
+                            {{ form_widget(form.year) }}
+                        </div>
+                        <div class="col-sm-12">
+                            {{ form_errors(form.day) }}
+                            {{ form_errors(form.year) }}
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group">
+                        <div class="col-sm-5">
+                            {{ form_widget(form.sex) }}
+                            {{ form_label(form.sex) }}
+                            {{ form_errors(form.sex) }}
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group">
+                        <div class="col-md-12">
+                            {{ form_label(form.email) }}
+                            {{ form_widget(form.email) }}
+                            {{ form_errors(form.email) }}
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group">
+                        <div class="col-md-12">
+                            {{ form_label(form.password.first) }}
+                            {{ form_widget(form.password.first) }}
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group">
+                        <div class="col-md-12">
+                            {{ form_label(form.password.second) }}
+                            {{ form_widget(form.password.second) }}
+                            {{ form_errors(form.password.first) }}
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group">
+                        <div class="col-md-12">
+                            <label class="pointer shop-cart-agree">
+                                {{ form_widget(form.termsAccepted) }}
+                                {{ form_label(form.termsAccepted) }}
+                                Acepto los
+                                <a href="{{ url('_support_terms') }}" target="_blank">
+                                    derechos y responsabilidades.
+                                </a>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        {{ form_widget(form.create) }}
+                    </div>
+                </div>
+
+                {{ form_end(form) }}
+
+            </div>
+            <!-- /REGISTER -->
+
+            <!-- WHY? -->
+            <div class="col-sm-6">
+
+                <h2>¿<strong>Por qué</strong> crearse una cuenta?</h2>
+
+                <div class="white-row">
+
+                    <h4>Crearse una cuenta es fácil, rápidos y gratis!</h4>
+
+                    <p>Una vez registrado, puedes:</p>
+                    <ul class="list-icon check">
+                        <li>Personalizar tu perfil.</li>
+                        <li>Buscar a otras personas.</li>
+                        <li>Invitarlas a ser tus amigos.</li>
+                        <li>Enviarles mensajes.</li>
+                        <li>Hacer publicaciones.</li>
+                        <li>Comentar las publicaciones de tus amigos.</li>
+                        <li>Comentar un producto y sugerirlo a un amigo.</li>
+                    </ul>
+
+                    <hr class="half-margins"/>
+
+                    <p>
+                        ¿Ya tienes una cuenta?
+                        <a href="{{ url('_login') }}">Has click aquí para iniciar tu sesión</a>
+                    </p>
+                </div>
+
+                <div class="white-row">
+                    <h4>Atención al cliente</h4>
+
+                    <p>
+                        Si estás buscando ayuda o tienes alguna pregunta, por favor <a
+                                href="{{ url('_support', {'page':'contact-us'}) }}">contáctanos</a>.
+                    </p>
+                </div>
+
+            </div>
+            <!-- /WHY? -->
+
+        </div>
+
+    </section>
+
+    </div>
+    <!-- /WRAPPER -->
+
+{% endblock body %}
+
+{% block footer %}
+    {% include 'AppBundle:design:footer_bar.html.twig' %}
+{% endblock footer %}

@@ -1,0 +1,75 @@
+{% extends 'AppBundle::base_front.html.twig' %}
+
+{% block header %}
+    {% include 'AppBundle:design:header_bar.html.twig' %}
+{% endblock header %}
+
+{% block body %}
+
+    <!-- WRAPPER -->
+    <div id="wrapper">
+
+        <!-- PAGE TITLE -->
+        <header id="page-title">
+            <div class="container">
+                <h1>Error 404</h1>
+                <ul class="breadcrumb">
+                    {{ wo_render_breadcrumbs() }}
+                </ul>
+            </div>
+        </header>
+
+        <section class="container">
+
+            <div class="row">
+
+                <div class="col-md-9">
+                    <h2>
+                        <strong>Oops</strong>, Esta página no ha podido ser encontrada !
+                        <span class="subtitle">Lo sentimos, la página que está buscando no existe.</span>
+                    </h2>
+
+                    <div class="e404">404</div>
+                </div>
+
+                <aside class="col-md-3">
+
+                    <h3>BUSCADOR</h3>
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <form method="get" action="{{ url('_search_global') }}" class="input-group">
+                                <input type="text" class="form-control" name="find" id="find"
+                                       placeholder="Buscar..."/>
+									<span class="input-group-btn">
+										<button class="btn btn-primary"><i class="fa fa-search"></i></button>
+									</span>
+                            </form>
+                        </div>
+                    </div>
+
+                    <h4>ENLACES</h4>
+                    <ul class="nav nav-list">
+                        <li><a href="{{ url('_home') }}"><i class="fa fa-circle-o"></i> Inicio</a></li>
+                        <li><a href="{{ url('_business', {'find':'all'}) }}"><i class="fa fa-circle-o"></i> Negocios</a></li>
+                        {#<li><a href="#"><i class="fa fa-circle-o"></i> Categorías</a></li>#}
+                        {#<li><a href="#"><i class="fa fa-circle-o"></i> Productos</a></li>#}
+                        <li><a href="{{ url('_offers', {'find':'all', 'field':'discount', 'order':'desc'}) }}"><i class="fa fa-circle-o"></i> Ofertas</a></li>
+                    </ul>
+
+
+                </aside>
+
+            </div>
+
+
+        </section>
+
+    </div>
+    <!-- /WRAPPER -->
+
+{% endblock body %}
+
+{% block footer %}
+    {% include 'AppBundle:design:footer_bar.html.twig' %}
+{% endblock footer %}

@@ -1,0 +1,14 @@
+{% set itemNum = arrayData.getPaginationData.current-1 %}
+{% set itemCurrent = arrayData.getPaginationData.current %}
+{% set itemPerPage = arrayData.getPaginationData.numItemsPerPage %}
+{% set itemTotal = arrayData.getTotalItemCount %}
+
+{% if itemCurrent == 1 and itemPerPage >= itemTotal or itemPerPage*itemNum+1 == itemTotal %}
+    Mostrando {{ itemTotal }} de {{ itemTotal }} resultados.
+{% else %}
+    {% if itemPerPage*itemCurrent > itemTotal %}
+        Mostrando {{ itemPerPage*itemNum+1 }}-{{ itemTotal }} de {{ itemTotal }} resultados.
+    {% else %}
+        Mostrando {{ itemPerPage*itemNum+1 }}-{{ itemPerPage*itemCurrent }} de {{ itemTotal }} resultados.
+    {% endif %}
+{% endif %}

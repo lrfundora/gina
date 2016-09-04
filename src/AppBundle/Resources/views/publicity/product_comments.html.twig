@@ -1,0 +1,297 @@
+{% extends 'AppBundle::base_front.html.twig' %}
+
+{% block header %}
+    {% include 'AppBundle:design:header_bar.html.twig' %}
+{% endblock header %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('bundles/app/backend/vendor/jquery-validation/jquery.validate.min.js') }}"></script>
+    <script>
+        $(function () {
+
+            // Validate Form
+            $("#form").validate({
+                rules: {
+                    'form[name]': {
+                        required: true,
+                        minlength: 3,
+                        maxlength: 20
+                    },
+                    'form[email]': {
+                        required: false,
+                        email: true
+                    },
+                    'form[text]': {
+                        required: true,
+                        maxlength: 1000
+                    }
+                },
+                messages: {
+                    'form[name]': {
+                        required: "Este campo no puede quedar vacío.",
+                        minlength: jQuery.validator.format("El campo debe tener al menos {0} caracteres."),
+                        maxlength: jQuery.validator.format("El campo puede tener como máximo {0} caracteres.")
+                    },
+                    'form[email]': {
+                        required: "Este campo no puede quedar vacío.",
+                        email: "Introduce una dirección de correo válida."
+                    },
+                    'form[text]': {
+                        required: "Este campo no puede quedar vacío.",
+                        maxlength: jQuery.validator.format("El campo puede tener como máximo {0} caracteres.")
+                    }
+                },
+                submitHandler: function (form) {
+                    form.submit();
+                },
+                errorPlacement: function (error, element) {
+                    $(element)
+                            .closest("form")
+                            .find("label[for='" + element.attr("id") + "']")
+                            .append(error);
+                },
+                errorElement: "span"
+            });
+
+        });
+    </script>
+{% endblock javascripts %}
+
+{% block body %}
+    <div id="wrapper">
+
+        <!-- PAGE TITLE -->
+        <header id="page-title">
+            <div class="container">
+                <h1>Comentarios del producto</h1>
+                <ul class="breadcrumb">
+                    {{ wo_render_breadcrumbs() }}
+                </ul>
+            </div>
+        </header>
+
+        <section class="container">
+
+            {% if prodDetail is not empty %}
+                <div class="row">
+                    <div class="col-sm-5 col-md-5">
+                        <ul class="isotope">
+                            <li class="isotope-item photography">
+                                <div class="owl-carousel controlls-over product-image"
+                                     data-plugin-options='{"items": 1, "singleItem": true, "navigation": true, "pagination": true, "transitionStyle":"fadeUp"}'>
+                                    {% for photo in prodDetail.photos %}
+                                        <div>
+                                            <img alt="" class="img-responsive"
+                                                 src="{{ asset(photo.path) }}"
+                                                 width="100%">
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="col-sm-7 col-md-7">
+
+                        <!-- product detail -->
+
+                    <span class="block fsize20">
+                       {{ prodDetail.name }}
+                    </span>
+
+                        <!-- product price -->
+                        {% if prodDetail.discount > 0 %}
+                            <div class="productRowInfo">
+                                <span style="color: #999">Precio:</span>
+                                {% set newprice = prodDetail.price - prodDetail.price * prodDetail.discount / 100 %}
+                                <span class="price styleSecondColor fsize20">${{ newprice | number_format(2, '.', ',') }}</span>
+                                <span style="color: #555; text-decoration: line-through;">${{ prodDetail.price }}</span>
+                            </div>
+                            <br/>
+                            <div class="productRowInfo">
+                                <span class="fsize15" style="color: #999">
+                                    <strong>
+                                        OFERTA:
+                                    </strong>
+                                </span><br/>
+                                <span style="color: #999">Descuento:</span>
+                                <span class="price styleSecondColor fsize15">{{ prodDetail.discount }}%</span>
+                            </div>
+                            <div class="productRowInfo">
+                                <span style="color: #999">Comienza:</span>
+                                <span class="fsize15" style="color: #555">{{ prodDetail.publicated | date('d/m/Y')}}</span>
+                            </div>
+                            <div class="productRowInfo">
+                                <span style="color: #999">Termina:</span>
+                                <span class="price styleSecondColor fsize15">{{ prodDetail.expired | date('d/m/Y')}}</span>
+                            </div>
+                            <div class="productRowInfo">
+                                <span style="color: #999">Condiciones:</span>
+                                <span class="fsize15" style="color: #555">{{ prodDetail.conditions==null?'Sin condiciones':prodDetail.conditions }}</span>
+                            </div>
+                        {% else %}
+                            <div class="productRowInfo">
+                                <span style="color: #999">Precio:</span>
+                                <span class="price styleSecondColor fsize20">${{ prodDetail.price | number_format(2, '.', ',') }}</span>
+                            </div>
+                        {% endif %}
+
+                        <div class="productRowInfo" style="color: #555">
+                            <br/>
+                        <span class="fsize15 styleColor" style="color: #999">
+                            <strong>
+                                UBICACIÓN:
+                            </strong>
+                        </span>
+                        <span class="block">
+                            <span class="styleColor" style="color: #999">Lugar:</span>
+                            <a class="styleColor"
+                               href="{{ url('_business', {'find':prodDetail.category.business.slug}) }}">
+                                {{ prodDetail.category.business.name }}
+                            </a>
+                        </span>
+                        <span class="block">
+                            <span style="color: #999">Categoría:</span>
+                            <a class="styleColor"
+                               href="{{ url('_business_categories', {'business':prodDetail.category.business.slug, 'find':prodDetail.category.slug}) }}">
+                                {{ prodDetail.category.name }}
+                            </a>
+                        </span>
+                        </div>
+                        <!-- /product price -->
+
+                        <!-- product description -->
+                        <div class="desc">
+                            <br/>
+                        <span class="fsize15 styleColor" style="color: #999">
+                            <strong>
+                                DESCRIPCIÓN:
+                            </strong>
+                        </span><br/>
+
+                            <p style="color: #555">
+                                {{ prodDetail.description }}
+                            </p>
+                        </div>
+                        <!-- /product description -->
+
+                    </div>
+                </div>
+
+                <!-- COMMENTS -->
+                <div class="row">
+                    <div class="col-md-12">
+                        <div id="comments">
+                            {% if nComments == 0 %}
+                                <div id="myComment"></div>
+                                <h4>No hay comentarios</h4>
+                            {% elseif nComments == 1 %}
+                                <h4>1 Comentario</h4>
+                            {% else %}
+                                <h4>{{ nComments }} Comentarios</h4>
+                            {% endif %}
+
+                            {% for comment in comments %}
+                            <!-- comment item -->
+                            <div class="comment">
+                                <!-- user-avatar -->
+                                <span class="user-avatar">
+                                    <img class="pull-left media-object"
+                                         src="{{ asset('bundles/app/assets/images/avatar.png') }}"
+                                         width="64" height="64" alt="">
+                                </span>
+
+                                <div class="media-body">
+                                    {#<a href="#commentForm" class="scrollTo replyBtn">reply</a>#}
+                                    <h4 class="media-heading bold">{{ comment.name }}</h4>
+                                    <small class="block">{{ comment.date | date('d/m/Y - g:ia') }}</small>
+                                    {{ comment.text }}
+                                    {{ loop.last ?'<div id="myComment"><br /></div>' :'' }}
+                                </div>
+                            </div>
+                            {% endfor %}
+
+
+                            <hr/>
+                            <!-- separator -->
+
+                            <h4>
+                                Deja tu comentario!
+                                <small class="block fsize13 font300">El campo Correo electrónico no es obligatorio y
+                                    tampoco será publicado pero sino pones tu dirección de correo,
+                                    <strong>¿Cómo contactamos contigo?</strong>
+                                </small>
+                            </h4>
+
+                            <!-- COMMENT FORM -->
+                            {{ form_start(form, {'attr':{'id':'form', 'name':'form', 'class':'form-horizontal'}}) }}
+                            {#<form id="form" class="form-horizontal" method="post" action="#">#}
+                                <div class="row">
+
+                                    <!-- name -->
+                                    <div class="col-md-6">
+                                        {{ form_label(form.name) }}
+                                        {{ form_widget(form.name) }}
+                                    </div>
+
+                                    <!-- email -->
+                                    <div class="col-md-6">
+                                        {{ form_label(form.email) }}
+                                        {{ form_widget(form.email) }}
+                                    </div>
+
+                                </div>
+
+                                <div class="row">
+
+                                    <!-- comment -->
+                                    <div class="col-md-12">
+                                        {{ form_widget(form.text) }}
+                                        {{ form_label(form.text) }}
+                                    </div>
+                                    <br/>
+
+                                    <!-- code info -->
+                                    <div class="col-md-12 font300 fsize14">
+                                        <p>
+                                            <strong>Nota:</strong> No se procesará ningún tipo de código en el
+                                            comentario,
+                                            será mostrado tal y como fue escrito.
+                                        </p>
+                                    </div>
+
+                                    <!-- btn -->
+                                    <div class="col-md-12">
+                                        <p>
+                                            {{ form_widget(form.send) }}
+                                        </p>
+                                    </div>
+
+                                </div>
+                            {{ form_end(form) }}
+                            {#</form>#}
+                            <!-- /COMMENT FORM -->
+
+                        </div>
+                    </div>
+                </div>
+                <!-- /COMMENTS -->
+
+            {% else %}
+                <div class="row">
+                    <div class="col-sm-12">
+                        <p class="fsize20">
+                            No hemos encontrado resultados para el "<strong>producto solicitado</strong>" !!!
+                        </p>
+                    </div>
+                </div>
+            {% endif %}
+        </section>
+
+    </div>
+    <!-- /WRAPPER -->
+{% endblock body %}
+
+{% block footer %}
+    {% include 'AppBundle:design:footer_bar.html.twig' %}
+{% endblock footer %}

@@ -1,0 +1,11 @@
+{% set uri = app.request.getUri %}
+{% set options = arrOptions %}
+
+<select name="order" id="order">
+    {% for option in options %}
+        <option value="{{ option[1] }}"
+                {{ uri == option[1] ? 'selected="selected"' : '' }}>
+            Ordenar por: {{ option[0] }}
+        </option>
+    {% endfor %}
+</select>

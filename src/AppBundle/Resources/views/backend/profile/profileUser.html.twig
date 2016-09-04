@@ -1,0 +1,347 @@
+{% extends 'AppBundle::base_back.html.twig' %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('bundles/app/backend/vendor/bootstrap-file-input/bootstrap.file-input.js') }}"></script>
+    <script src="{{ asset('bundles/app/backend/vendor/jquery-validation/jquery.validate.min.js') }}"></script>
+    <script>
+        $(function () {
+
+            $('input[type="file"]').bootstrapFileInput();
+            $('.input-group-addon').on('click', function (e) {
+                e.preventDefault();
+            });
+
+            // Validate FormInfo
+            $("#formInfo").validate({
+                rules: {
+                    'formInfo[name]': {
+                        required: true,
+                        minlength: 3
+                    },
+                    'formInfo[lastname]': {
+                        required: true,
+                        minlength: 3
+                    },
+                    'formInfo[user]': {
+                        required: true,
+                        minlength: 3,
+                        maxlength: 40
+                    }
+                },
+                messages: {
+                    'formInfo[name]': {
+                        required: "Este campo no puede quedar vacío.",
+                        minlength: jQuery.validator.format("El campo debe tener al menos {0} caracteres.")
+                    },
+                    'formInfo[lastname]': {
+                        required: "Este campo no puede quedar vacío.",
+                        minlength: jQuery.validator.format("El campo debe tener al menos {0} caracteres.")
+                    },
+                    'formInfo[user]': {
+                        required: "Este campo no puede quedar vacío.",
+                        minlength: jQuery.validator.format("El campo debe tener al menos {0} caracteres."),
+                        maxlength: jQuery.validator.format("El campo puede tener como máximo {0} caracteres.")
+                    }
+                },
+                submitHandler: function (form) {
+                    form.submit();
+                },
+                errorPlacement: function (error, element) {
+                    $(element)
+                            .closest("form")
+                            .find("label[for='" + element.attr("id") + "']")
+                            .append(error);
+                },
+                errorElement: "span"
+            });
+
+            // Validate FormPass
+            $("#formPass").validate({
+                rules: {
+                    'formPass[oldPassword]': {
+                        required: true
+                    },
+                    'formPass[password][first]': {
+                        required: true,
+                        minlength: 5,
+                        maxlength: 255
+                    },
+                    'formPass[password][second]': {
+                        required: true,
+                        equalTo: '#formPass_password_first'
+                    }
+                },
+                messages: {
+                    'formPass[oldPassword]': {
+                        required: "Este campo no puede quedar vacío."
+                    },
+                    'formPass[password][first]': {
+                        required: "Este campo no puede quedar vacío.",
+                        minlength: jQuery.validator.format("El campo debe tener al menos {0} caracteres."),
+                        maxlength: jQuery.validator.format("El campo puede tener como máximo {0} caracteres.")
+                    },
+                    'formPass[password][second]': {
+                        required: "Repite nuevamente la contraseña.",
+                        equalTo: "Las contraseñas no coinciden."
+                    }
+                },
+                submitHandler: function (form) {
+                    form.submit();
+                },
+                errorPlacement: function (error, element) {
+                    $(element)
+                            .closest("form")
+                            .find("label[for='" + element.attr("id") + "']")
+                            .append(error);
+                },
+                errorElement: "span"
+            });
+
+        });
+
+        $("#upload").on('click', function (e) {
+            $('#formPhoto').submit();
+        });
+
+    </script>
+{% endblock javascripts %}
+
+{% block header %}
+    {% include 'AppBundle:backend/design:header_bar.html.twig' %}
+{% endblock header %}
+
+{% block body %}
+    <div id="wrapper">
+
+        <!-- Breadcrumb -->
+        <div class="normalheader transition animated fadeIn small-header">
+            <div class="hpanel">
+                <div class="panel-body">
+                    <a class="small-header-action" href="#">
+                        <div class="clip-header">
+                            <i class="fa fa-arrow-down"></i>
+                        </div>
+                    </a>
+
+                    <div id="hbreadcrumb" class="pull-right">
+                        <ol class="hbreadcrumb breadcrumb">
+                            <li>
+                                <a href="{{ path('_admin_index') }}">Inicio</a>
+                            </li>
+                            <li class="active">
+                                <span>Perfil</span>
+                            </li>
+                        </ol>
+                    </div>
+                    <h2 class="font-light m-b-xs">
+                        panel de control
+                    </h2>
+                    <small>Herramienta administrativa que permite mantener actualizada la información</small>
+                </div>
+            </div>
+        </div>
+        <!-- /Breadcrumb -->
+
+        <!-- Form -->
+        <div class="content animate-panel">
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="hpanel">
+                        <div class="panel-heading font-uppercase">
+                            {#<div class="panel-tools">#}
+                                {#<a class="showhide"><i class="fa fa-chevron-up"></i></a>#}
+                            {#</div>#}
+                            perfil de usuario
+                        </div>
+                        <div class="panel-body">
+                            <div class="hpanel">
+                                <div class="panel-body">
+                                    <div class="">
+                                        <h3 class="text-uppercase">
+                                            perfil
+                                        </h3>
+                                    </div>
+
+                                    <hr class="left-separator">
+
+                                    <div class="row">
+                                        <div class="col-lg-12 animated-panel zoomIn" style="animation-delay: 0.4s;">
+                                            <div class="hpanel">
+                                                <ul class="nav nav-tabs">
+                                                    <li {{ tab=='1' ?'class="active"' :'' }}>
+                                                        <a href="#tab-1" data-toggle="tab" aria-expanded="false">
+                                                            <i class="fa fa-user"></i>
+                                                            Información de usuario
+                                                        </a>
+                                                    </li>
+                                                    <li {{ tab=='2' ?'class="active"' :'' }}>
+                                                        <a href="#tab-2" data-toggle="tab" aria-expanded="false">
+                                                            <i class="fa fa-picture-o"></i>
+                                                            Cambiar imagen
+                                                        </a>
+                                                    </li>
+                                                    <li {{ tab=='3' ?'class="active"' :'' }}>
+                                                        <a href="#tab-3" data-toggle="tab" aria-expanded="true">
+                                                            <i class="fa fa-key"></i>
+                                                            Cambiar contraseña
+                                                        </a>
+                                                    </li>
+                                                </ul>
+                                                <div class="tab-content">
+                                                    <div id="tab-1" {{ tab=='1' ?'class="tab-pane active"' :'class="tab-pane"' }}>
+                                                        <div class="panel-body">
+                                                            <div class="row">
+                                                                <div class="col-sm-3"></div>
+                                                                <div class="col-sm-6">
+                                                                    {% for Message in app.session.flashbag.get('userInfo') %}
+                                                                        <div class="alert alert-success">
+                                                                            <i class="fa fa-smile-o"></i>
+                                                                            {{ Message | raw }}
+                                                                        </div>
+                                                                        <br/>
+                                                                    {% endfor %}
+                                                                    <div class="row show-grid">
+                                                                        <div class="col-sm-12">
+                                                                            {{ form_start(formInfo, {'attr':{'id':'formInfo' }}) }}
+                                                                            <div class="form-group">
+                                                                                {{ form_label(formInfo.name) }}
+                                                                                {{ form_widget(formInfo.name) }}
+                                                                            </div>
+                                                                            <div class="form-group">
+                                                                                {{ form_label(formInfo.lastname) }}
+                                                                                {{ form_widget(formInfo.lastname) }}
+                                                                            </div>
+                                                                            <div class="form-group">
+                                                                                {{ form_label(formInfo.user) }}
+                                                                                {{ form_widget(formInfo.user) }}
+                                                                            </div>
+                                                                            <div class="form-group hidden">
+                                                                                {{ form_widget(formInfo.isActive) }}
+                                                                                {{ form_label(formInfo.isActive) }}
+                                                                            </div>
+                                                                            {{ form_widget(formInfo.save) }}
+                                                                            {{ form_end(formInfo) }}
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-sm-3"></div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div id="tab-2" {{ tab=='2' ?'class="tab-pane active"' :'class="tab-pane"' }}>
+                                                        <div class="panel-body">
+                                                            <div class="row">
+                                                                <div class="col-sm-3"></div>
+                                                                <div class="col-sm-6">
+                                                                    {% for Message in app.session.flashbag.get('userPhoto') %}
+                                                                        <div class="alert alert-success">
+                                                                            <i class="fa fa-smile-o"></i>
+                                                                            {{ Message | raw }}
+                                                                        </div>
+                                                                        <br/>
+                                                                    {% endfor %}
+                                                                    <p class="alert alert-info">
+                                                                        <i class="fa fa-exclamation-circle"></i>
+                                                                        Ajustarse a las dimensiones de la imagen
+                                                                        garantiza la optima experiencia del diseño.
+                                                                    </p>
+
+                                                                    <div class="row show-grid">
+                                                                        <div class="col-sm-12">
+                                                                            <img src="{{ app.user.photo ? asset(app.user.photo.path) : asset('bundles/app/backend/images/default-user.png') }}"
+                                                                                 class="img-thumbnail m-b center-block"
+                                                                                 width="125px"
+                                                                                 height="125px"
+                                                                                 alt="{{ app.user.name }}">
+
+                                                                            {{ form_start(formPhoto, {'attr':{'id':'formPhoto','action':path('_admin_profile_photo')}}) }}
+                                                                            <div class="input-group bootstrap-touchspin">
+                                                                                {{ form_label(formPhoto.file) }}
+                                                                                {{ form_widget(formPhoto.file, {'attr':{'title':'Seleccione una imagen de perfil (125x125)' }}) }}
+                                                                                <span id="upload"
+                                                                                      class="input-group-addon bootstrap-touchspin-postfix btn btn-default">
+                                                                            <i class="fa fa-upload"></i>
+                                                                            Subir imagen
+                                                                        </span>
+                                                                            </div>
+                                                                            {{ form_end(formPhoto) }}
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-sm-3"></div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div id="tab-3" {{ tab=='3' ?'class="tab-pane active"' :'class="tab-pane"' }}>
+                                                        <div class="panel-body">
+                                                            <div class="row">
+                                                                <div class="col-sm-3"></div>
+                                                                <div class="col-sm-6">
+                                                                    {% for Message in app.session.flashbag.get('userPassSuccess') %}
+                                                                        <div class="alert alert-success">
+                                                                            <i class="fa fa-smile-o"></i>
+                                                                            {{ Message | raw }}
+                                                                        </div>
+                                                                        <br/>
+                                                                    {% endfor %}
+                                                                    {% for Message in app.session.flashbag.get('userPassError') %}
+                                                                        <div class="alert alert-danger">
+                                                                            <i class="fa fa-frown-o"></i>
+                                                                            {{ Message | raw }}
+                                                                        </div>
+                                                                        <br/>
+                                                                    {% endfor %}
+                                                                    {% for Message in app.session.flashbag.get('userPassWeak') %}
+                                                                        <div class="alert alert-warning">
+                                                                            <i class="fa fa-warning"></i>
+                                                                            {{ Message | raw }}
+                                                                        </div>
+                                                                        <br/>
+                                                                    {% endfor %}
+                                                                    <div class="row show-grid">
+                                                                        <div class="col-sm-12">
+                                                                            {{ form_start(formPass, {'attr':{'id':'formPass'}}) }}
+                                                                            <div class="form-group">
+                                                                                {{ form_label(formPass.oldPassword) }}
+                                                                                {{ form_widget(formPass.oldPassword) }}
+                                                                            </div>
+                                                                            <div class="form-group">
+                                                                                {{ form_errors(formPass.password) }}
+                                                                                {{ form_label(formPass.password.first) }}
+                                                                                {{ form_widget(formPass.password.first) }}
+                                                                            </div>
+                                                                            <div class="form-group">
+                                                                                {{ form_label(formPass.password.second) }}
+                                                                                {{ form_widget(formPass.password.second) }}
+                                                                            </div>
+                                                                            {{ form_widget(formPass.save) }}
+                                                                            {{ form_end(formPass) }}
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-sm-3"></div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- /Form -->
+
+            <!-- Footer -->
+            {% include 'AppBundle:backend/design:footer_bar.html.twig' %}
+            <!-- /Footer -->
+
+        </div>
+
+    </div>
+{% endblock body %}

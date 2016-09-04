@@ -1,0 +1,160 @@
+{% extends 'AppBundle::base_back.html.twig' %}
+
+{% block header %}
+    {% include 'AppBundle:backend/design:header_bar.html.twig' %}
+{% endblock header %}
+
+{% block body %}
+    <div id="wrapper">
+
+        <!-- Breadcrumb -->
+        <div class="normalheader transition animated fadeIn small-header">
+            <div class="hpanel">
+                <div class="panel-body">
+                    <a class="small-header-action" href="#">
+                        <div class="clip-header">
+                            <i class="fa fa-arrow-down"></i>
+                        </div>
+                    </a>
+
+                    <div id="hbreadcrumb" class="pull-right">
+                        <ol class="hbreadcrumb breadcrumb">
+                            <li><a href="{{ path('_admin_index') }}">Inicio</a></li>
+                            <li>
+                                <a href="{{ path('_admin_notice') }}">Notificaciones</a>
+                            </li>
+                            <li class="active">
+                                <span>Leer</span>
+                            </li>
+                        </ol>
+                    </div>
+                    <h2 class="font-light m-b-xs">
+                        panel de control
+                    </h2>
+                    <small>Herramienta administrativa que permite mantener actualizada la información</small>
+                </div>
+            </div>
+        </div>
+        <!-- /Breadcrumb -->
+
+        <!-- Message -->
+        <div class="content animate-panel">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="hpanel">
+                        <div class="panel-heading font-uppercase">
+                            lectura de notificación
+                        </div>
+                        <div class="panel-body">
+                            <div class="hpanel">
+                                <div class="panel-body">
+                                    <div class="">
+                                        <h3 class="text-uppercase">
+                                            <a href="{{ path('_admin_notice') }}" class="btn btn-default"
+                                               style="margin-top: -5px;">
+                                                <i class="fa fa-arrow-left"></i>
+                                            </a>
+                                            lectura de notificación
+
+                                            <button type="button"
+                                                    class="btn btn-danger2 btn-sm pull-right text-capitalize"
+                                                    data-toggle="modal"
+                                                    data-target="#modalDelete">
+                                                <i class="fa fa-trash"></i>
+                                                Eliminar
+                                            </button>
+                                        </h3>
+                                    </div>
+
+                                    <hr class="left-separator">
+
+                                    {% for Message in app.session.flashbag.get('show') %}
+                                    <div class="alert alert-danger">
+                                        <i class="fa fa-frown-o"></i>
+                                        {{ Message | raw }}
+                                    </div>
+                                    <br/>
+
+                                    {% else %}
+
+                                    <div class="row show-grid">
+                                        <div class="col-sm-9">
+                                            <span class="font-uppercase font-bold font-trans">Tipo de notificación:</span>
+                                            {{ notice.type.name }}
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <span class="font-uppercase font-bold font-trans">Enviada:</span>
+                                            {{ notice.date | date('d/m/Y g:i A') }}
+                                        </div>
+                                    </div>
+
+                                    {% if notice.type.type=='email' %}
+                                        <div class="row show-grid">
+                                            <div class="col-sm-12">
+                                                <span class="font-uppercase font-bold font-trans">Cliente:</span>
+                                                {{ notice.mail.name }}
+                                            </div>
+                                        </div>
+                                        <div class="row show-grid">
+                                            <div class="col-sm-12">
+                                                <span class="font-uppercase font-bold font-trans">E-mail:</span>
+                                                {{ notice.mail.email }}
+                                            </div>
+                                        </div>
+                                    {% endif %}
+
+                                    <div class="row show-grid">
+                                        <div class="col-sm-12">
+                                            <span class="font-uppercase font-bold font-trans">Asunto:</span>
+                                            {{ notice.subject }}
+                                        </div>
+                                    </div>
+                                    <div class="row show-grid">
+                                        <div class="col-sm-12">
+                                            <span class="font-uppercase font-bold font-trans">Mensaje:</span> <br/>
+                                            {{ notice.message | raw }}
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                                {% endfor %}
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /Message -->
+
+        <!-- Modal -->
+        <div class="modal fade hmodal-danger" id="modalDelete" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="color-line"></div>
+                    <div class="modal-header">
+                        <h4 class="modal-title">¿Está seguro?</h4>
+                    </div>
+                    <div class="modal-body">
+                        <p>
+                            Si elimina esta notificación <strong>no podrá recuperarla!</strong>
+                        </p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">No, Cancelar</button>
+                        <a class="btn btn-danger2"
+                           href="{{ url('_admin_notice_delete',{'id':notice.id}) }}">Si, Eliminar</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /Modal -->
+
+        <!-- Footer -->
+        {% include 'AppBundle:backend/design:footer_bar.html.twig' %}
+        <!-- /Footer -->
+
+    </div>
+
+{% endblock body %}

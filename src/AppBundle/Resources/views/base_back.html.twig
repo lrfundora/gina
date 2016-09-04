@@ -1,0 +1,52 @@
+{% extends 'AppBundle::base.html.twig' %}
+
+{% block meta %}
+
+    <!-- mobile settings -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+{% endblock %}
+
+{% block title %}
+    Panel de control
+{% endblock %}
+
+{% block icon %}
+
+    <!-- Icon -->
+    <link rel="icon" type="image/png" href="{{ asset('bundles/app/backend/icon-back.png') }}"/>
+
+{% endblock %}
+
+{% block stylesheets %}
+
+    <!-- Core css -->
+    <link rel="stylesheet" href="{{ asset('bundles/app/backend/vendor/fontawesome/css/font-awesome.css') }}"/>
+    <link rel="stylesheet" href="{{ asset('bundles/app/backend/vendor/metisMenu/dist/metisMenu.css') }}"/>
+    <link rel="stylesheet" href="{{ asset('bundles/app/backend/vendor/animate.css/animate.css') }}"/>
+    <link rel="stylesheet" href="{{ asset('bundles/app/backend/vendor/bootstrap/dist/css/bootstrap.css') }}"/>
+
+    <!-- App styles -->
+    <link rel="stylesheet" href="{{ asset('bundles/app/backend/fonts/pe-icon-7-stroke/css/pe-icon-7-stroke.css') }}"/>
+    <link rel="stylesheet" href="{{ asset('bundles/app/backend/fonts/pe-icon-7-stroke/css/helper.css') }}"/>
+    <link rel="stylesheet" href="{{ asset('bundles/app/backend/styles/style.css') }}">
+
+{% endblock %}
+
+{% block javascripts %}
+
+    <!-- Vendor scripts -->
+    {# Conumes hasta el momento #}
+    <script src="{{ asset('bundles/app/backend/vendor/jquery/dist/jquery.min.js') }}"></script>
+    <script src="{{ asset('bundles/app/backend/vendor/jquery-ui/jquery-ui.min.js') }}"></script>
+    <script src="{{ asset('bundles/app/backend/vendor/slimScroll/jquery.slimscroll.min.js') }}"></script>
+    <script src="{{ asset('bundles/app/backend/vendor/bootstrap/dist/js/bootstrap.min.js') }}"></script>
+    <script src="{{ asset('bundles/app/backend/vendor/metisMenu/dist/metisMenu.min.js') }}"></script>
+    <script src="{{ asset('bundles/app/backend/vendor/iCheck/icheck.min.js') }}"></script>
+    <script src="{{ asset('bundles/app/backend/vendor/sparkline/index.js') }}"></script>
+
+    <!-- App scripts -->
+    <script src="{{ asset('bundles/app/backend/scripts/homer.js') }}"></script>
+
+{% endblock %}

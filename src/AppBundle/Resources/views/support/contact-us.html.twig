@@ -1,0 +1,215 @@
+{% extends 'AppBundle::base_front.html.twig' %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('bundles/app/backend/vendor/jquery-validation/jquery.validate.min.js') }}"></script>
+    <script>
+        $(function () {
+
+            // Validate Form
+            $("#contactForm").validate({
+                rules: {
+                    'contactForm[name]': {
+                        required: true,
+                        minlength: 3,
+                        maxlength: 20
+                    },
+                    'contactForm[email]': {
+                        required: true,
+                        email: true
+                    },
+                    'contactForm[subject]': {
+                        required: true,
+                        minlength: 3,
+                        maxlength: 40
+                    },
+                    'contactForm[message]': {
+                        required: true,
+                        maxlength: 1000
+                    }
+                },
+                messages: {
+                    'contactForm[name]': {
+                        required: "Este campo no puede quedar vacío.",
+                        minlength: jQuery.validator.format("El campo debe tener al menos {0} caracteres."),
+                        maxlength: jQuery.validator.format("El campo puede tener como máximo {0} caracteres.")
+                    },
+                    'contactForm[email]': {
+                        required: "Este campo no puede quedar vacío.",
+                        email: "Introduce una dirección de correo válida."
+                    },
+                    'contactForm[subject]': {
+                        required: "Este campo no puede quedar vacío.",
+                        minlength: jQuery.validator.format("El campo debe tener al menos {0} caracteres."),
+                        maxlength: jQuery.validator.format("El campo puede tener como máximo {0} caracteres.")
+                    },
+                    'contactForm[message]': {
+                        required: "Este campo no puede quedar vacío.",
+                        maxlength: jQuery.validator.format("El campo puede tener como máximo {0} caracteres.")
+                    }
+                },
+                submitHandler: function (form) {
+                    form.submit();
+                },
+                errorPlacement: function (error, element) {
+                    $(element)
+                            .closest("form")
+                            .find("label[for='" + element.attr("id") + "']")
+                            .append(error);
+                },
+                errorElement: "span"
+            });
+
+        });
+    </script>
+{% endblock javascripts %}
+
+{% block header %}
+    {% include 'AppBundle:design:header_bar.html.twig' %}
+{% endblock header %}
+
+{% block body %}
+    <!-- WRAPPER -->
+    <div id="wrapper">
+
+        <!-- PAGE TITLE -->
+        <header id="page-title">
+
+            <div class="container">
+                <h1>Contacto</h1>
+                <ul class="breadcrumb">
+                    {{ wo_render_breadcrumbs() }}
+                </ul>
+            </div>
+        </header>
+
+        <section id="contact" class="container">
+
+
+            <div class="row">
+
+                <!-- FORM -->
+                <div class="col-sm-8">
+
+                    <h2>Contáctanos o simplemente dinos <strong><em>Hola!</em></strong></h2>
+
+                    <!--
+                        if you want to use your own contact script, remove .hide class
+                    -->
+
+                    {% for Message in app.session.flashbag.get('contactInfo') %}
+                        <!-- SENT OK -->
+                        <div class="alert alert-success fade in fsize16">
+                            <i class="fa fa-smile-o"></i>{{ Message | raw }}
+                        </div>
+                        <!-- /SENT OK -->
+                    {% endfor %}
+                    <!-- SENT FAILED -->
+                    <div id="_sent_required_" class="alert alert-danger fade in fsize16 hide">
+                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+
+                        <strong>Failed!</strong> Please complete all mandatory (*) fields!
+                    </div>
+                    <!-- /SENT FAILED -->
+
+                    {{ form_start(form, {'attr':{'id':'contactForm','name':'contactForm','class':'white-row'}}) }}
+
+                    <div class="row">
+                        <div class="form-group">
+                            <div class="col-md-12">
+                                {{ form_label(form.name) }}
+                                {{ form_widget(form.name) }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group">
+                            <div class="col-md-12">
+                                {{ form_label(form.email) }}
+                                {{ form_widget(form.email) }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group">
+                            <div class="col-md-12">
+                                {{ form_label(form.subject) }}
+                                {{ form_widget(form.subject) }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group">
+                            <div class="col-md-12">
+                                {{ form_label(form.message) }}
+                                {{ form_widget(form.message) }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            {{ form_widget(form.send) }}
+                        </div>
+                    </div>
+                    {{ form_end(form) }}
+
+                </div>
+                <!-- /FORM -->
+
+
+                <!-- INFO -->
+                <div class="col-sm-4">
+
+                    <h2>Visítanos</h2>
+
+                    <p>
+                        Le aseguramos que visitar cualquiera de nuestros establacimientos será un experiencia única
+                        llena de goso, buen trato y satisfacción.
+                    </p>
+
+                    <div class="divider half-margins"><!-- divider -->
+                        <i class="fa fa-star"></i>
+                    </div>
+                    {% for app in data %}
+                        <p>
+                            <span class="block"><strong>
+                                    <i class="fa fa-map-marker"></i>
+                                    Dirección: </strong>{{ app.address }}
+                            </span>
+                            <span class="block"><strong>
+                                    <i class="fa fa-phone"></i>
+                                    Teléfono: </strong>{{ app.phone }}
+                            </span>
+                            <span class="block"><strong>
+                                    <i class="fa fa-envelope"></i>
+                                    Email: </strong> <a href="{{ app.email }}">{{ app.email }}</a>
+                            </span>
+                        </p>
+                    {% endfor %}
+                    <!--
+                    <div class="divider half-margins"><!-- divider
+                        <i class="fa fa-star"></i>
+                    </div>
+
+                    <h4 class="font300">Business Hours</h4>
+
+                    <p>
+                        <span class="block"><strong>Monday - Friday:</strong> 10am to 6pm</span>
+                        <span class="block"><strong>Saturday:</strong> 10am to 2pm</span>
+                        <span class="block"><strong>Sunday:</strong> Closed</span>
+                    </p>
+                    -->
+                </div>
+                <!-- /INFO -->
+
+            </div>
+
+        </section>
+
+    </div>
+    <!-- /WRAPPER -->
+{% endblock body %}
+
+{% block footer %}
+    {% include 'AppBundle:design:footer_bar.html.twig' %}
+{% endblock footer %}

@@ -1,0 +1,131 @@
+{% extends 'AppBundle::base_front.html.twig' %}
+
+{% block header %}
+  {% include 'AppBundle:design:header_bar.html.twig' %}
+{% endblock header %}
+
+{% block body %}
+
+  <!-- WRAPPER -->
+  <div id="wrapper">
+
+    <div id="shop">
+
+      <!-- PAGE TITLE -->
+      <header id="page-title">
+        <div class="container">
+          <h1>Iniciar sesión</h1>
+          <ul class="breadcrumb">
+            {{ wo_render_breadcrumbs() }}
+          </ul>
+        </div>
+      </header>
+
+
+      <section class="container">
+
+        <div class="row">
+
+          <!-- LOGIN -->
+          <div class="col-md-6">
+
+            <h2><strong>Iniciar</strong> sesión</h2>
+
+            <form class="white-row" action="{{ url('_check') }}" method="post" >
+              {% if error %}
+                <!-- alert failed -->
+                <div class="alert alert-danger">
+                  <i class="fa fa-frown-o"></i>
+                    {{ error | raw }}
+                </div>
+              {% else %}
+              {% endif %}
+              <div class="row">
+                <div class="col-md-12">
+                  <div class="form-group">
+                    <label class="hidden">Correo electrónico</label>
+                    <input class="form-control" type="email" id="username" name="_username" required value="{{ last_username }}" placeholder="Correo electrónico" />
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-12">
+                  <div class="form-group">
+                    <label class="hidden">Contraseña</label>
+                    <input class="form-control" type="password" id="password" name="_password" required placeholder="Contraseña" />
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-6">
+                    <label class="pointer shop-cart-agree">
+                        <input type="checkbox" id="remember_me" name="_remember_me" checked> No cerrar sesión.
+                    </label>
+                </div>
+                <div class="col-md-6">
+                  <input class="btn btn-primary pull-right" id="send" type="submit" name="_login" value="Entrar" data-loading-text="Loading..." />
+                </div>
+              </div>
+
+            </form>
+
+          </div>
+          <!-- /LOGIN -->
+
+          <!-- PASSWORD -->
+          <div class="col-md-6">
+
+            <h2>¿Has olvidado tu <strong>contraseña</strong>?</h2>
+
+            <div class="white-row">
+
+              <p>
+                Si has olvidado tu contraseña, podemos enviarte una nueva a tu correo electrónico y será obligatorio que la cambies al iniciar sesión.
+              </p>
+
+              <!-- alert success
+              <div class="alert alert-success">
+                <i class="fa fa-check-circle"></i>
+                <strong>Nueva Contraseña enviada!</strong> Chequee su Correo Electrónico!
+              </div>
+              -->
+
+              <!-- alert failed
+              <div class="alert alert-danger">
+                <i class="fa fa-frown-o"></i>
+                <strong>Correo Electrónico</strong> no encontrado!
+              </div>
+              -->
+
+              <!-- password form -->
+              <label class="hidden">Escriba su <strong>correo electrónico</strong>.</label>
+              <form class="input-group" method="post" action="#">
+                <input type="text" class="form-control" name="" id="" value="" placeholder="Correo electrónico" />
+                    <span class="input-group-btn">
+                      <button class="btn btn-primary">Enviar</button>
+                    </span>
+              </form>
+
+            </div>
+
+          </div>
+          <!-- /PASSWORD -->
+
+        </div>
+
+
+        <p class="white-row">
+          ¿No tiene una cuenta aún? <a href="{{ url('_register') }}">Has click aquí para crearte una</a>, <strong>es gratis!</strong>
+        </p>
+
+      </section>
+
+    </div>
+  </div>
+  <!-- /WRAPPER -->
+
+{% endblock body %}
+
+{% block footer %}
+  {% include 'AppBundle:design:footer_bar.html.twig' %}
+{% endblock footer %}

@@ -1,0 +1,14 @@
+<!-- Simple splash screen-->
+<div class="splash">
+    <div class="color-line"></div>
+    <div class="splash-title">
+        <h1>Hola {{ app.user.name }}!!!</h1>
+        <p>
+            Espera mientras iniciamos el Panel de Control...
+        </p>
+        <img src="{{ asset('bundles/app/backend/images/loading-bars.svg') }}" width="64" height="64" />
+    </div>
+</div>
+<!--[if lt IE 7]>
+<p class="alert alert-danger">El navegador que usa está <strong>desactualizado</strong>. Por favor, <a href="http://browsehappy.com/">actualiza tu navegador</a> para mejorar la experiencia.</p>
+<![endif]-->

@@ -1,0 +1,155 @@
+{% extends 'AppBundle::base_back.html.twig' %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('bundles/app/backend/vendor/jquery-validation/jquery.validate.min.js') }}"></script>
+    <script>
+        $(function () {
+
+            $("#addCategory").validate({
+                rules: {
+                    'addCategory[business]': {
+                        required: true
+                    },
+                    'addCategory[category]': {
+                        required: true,
+                        minlength: 3
+                    }
+                },
+                messages: {
+                    'addCategory[business]': {
+                        required: "Por favor, selecciona un negocio..."
+                    },
+                    'addCategory[category]': {
+                        required: "Este campo no puede quedar vacío.",
+                        minlength: jQuery.validator.format("El campo debe tener al menos {0} caracteres.")
+                    }
+                },
+                submitHandler: function (form) {
+                    form.submit();
+                },
+                errorPlacement: function (error, element) {
+                    $(element)
+                            .closest("form")
+                            .find("label[for='" + element.attr("id") + "']")
+                            .append(error);
+                },
+                errorElement: "span"
+            });
+
+        });
+    </script>
+{% endblock javascripts %}
+
+{% block header %}
+    {% include 'AppBundle:backend/design:header_bar.html.twig' %}
+{% endblock header %}
+
+{% block body %}
+    <div id="wrapper">
+
+    <!-- Breadcrumb -->
+    <div class="normalheader transition animated fadeIn small-header">
+        <div class="hpanel">
+            <div class="panel-body">
+                <a class="small-header-action" href="#">
+                    <div class="clip-header">
+                        <i class="fa fa-arrow-down"></i>
+                    </div>
+                </a>
+
+                <div id="hbreadcrumb" class="pull-right">
+                    <ol class="hbreadcrumb breadcrumb">
+                        <li><a href="{{ path('_admin_index') }}">Inicio</a></li>
+                        <li>
+                            <a href="{{ path('_admin_category') }}">Categoría</a>
+                        </li>
+                        <li class="active">
+                            <span>Agregar</span>
+                        </li>
+                    </ol>
+                </div>
+                <h2 class="font-light m-b-xs">
+                    panel de control
+                </h2>
+                <small>Herramienta administrativa que permite mantener actualizada la información</small>
+            </div>
+        </div>
+    </div>
+    <!-- /Breadcrumb -->
+
+    <!-- Form -->
+    <div class="content animate-panel">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="hpanel">
+                <div class="panel-heading font-uppercase">
+                    {#<div class="panel-tools">#}
+                        {#<a class="showhide"><i class="fa fa-chevron-up"></i></a>#}
+                    {#</div>#}
+                    Agregar nueva categoría
+                </div>
+                <div class="panel-body">
+                    <div class="hpanel">
+                        <div class="panel-body">
+                            <div class="">
+                                <h3 class="text-uppercase">
+                                    <a href="{{ path('_admin_category') }}" class="btn btn-default" style="margin-top: -5px;">
+                                        <i class="fa fa-arrow-left"></i>
+                                    </a>
+                                    nueva categoría
+                                </h3>
+                            </div>
+
+                            <hr class="left-separator">
+
+                            <div class="row">
+                                <div class="col-sm-4"></div>
+                                <div class="col-sm-4">
+                                    <div class="row show-grid">
+                                        {% for Message in app.session.flashbag.get('addCategoryError') %}
+                                            <p class="alert alert-danger">
+                                                <span class="fa fa-frown-o"></span>
+                                                {{ Message | raw }}
+                                            </p>
+                                            <br/>
+                                        {% endfor %}
+                                        {% for Message in app.session.flashbag.get('addCategorySuccess') %}
+                                            <p class="alert alert-success">
+                                                <span class="fa fa-smile-o"></span>
+                                                {{ Message | raw }}
+                                            </p>
+                                            <br/>
+                                        {% endfor %}
+                                        <div class="col-sm-12">
+                                            {{ form_start(form, {'attr':{'id':'addCategory', 'name':'addCategory'}}) }}
+                                            <div class="form-group">
+                                                {{ form_label(form.business) }}
+                                                {{ form_widget(form.business) }}
+                                            </div>
+                                            <div class="form-group">
+                                                {{ form_label(form.category) }}
+                                                {{ form_widget(form.category) }}
+                                            </div>
+                                            {{ form_widget(form.add) }}
+                                            {{ form_end(form) }}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-4"></div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /Form -->
+
+        <!-- Footer -->
+        {% include 'AppBundle:backend/design:footer_bar.html.twig' %}
+        <!-- /Footer -->
+
+    </div>
+
+{% endblock body %}
